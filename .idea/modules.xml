@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/CheckPrimeNumber/CheckPrimeNumber.iml" filepath="$PROJECT_DIR$/CheckPrimeNumber/CheckPrimeNumber.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Farm/Farm.iml" filepath="$PROJECT_DIR$/Farm/Farm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GeometryCalculator/GeometryCalculator.iml" filepath="$PROJECT_DIR$/GeometryCalculator/GeometryCalculator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MultiplicationTable/MultiplicationTable.iml" filepath="$PROJECT_DIR$/MultiplicationTable/MultiplicationTable.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ThrowDice/ThrowDice.iml" filepath="$PROJECT_DIR$/ThrowDice/ThrowDice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/java_matzner.iml" filepath="$PROJECT_DIR$/.idea/java_matzner.iml" />
+    </modules>
+  </component>
+</project>
