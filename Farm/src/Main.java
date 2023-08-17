@@ -1,52 +1,61 @@
+import animals.Chicken;
+import animals.Cow;
+import animals.Sheep;
+import farm.Farm;
+
 import java.util.Scanner;
 
 public class Main {
-
-    public static int hungerSheep = 50, hungerCow = 60, hungerChicken = 60;
-    public static boolean feedAnimal = false, isSheep = false, isCow = false, isChicken = false;
     public static Scanner scanner = new Scanner(System.in);
+    public static Farm farm;
 
     public static void main(String[] args) {
+        farm = new Farm();
         String animal;
         boolean noDeadAnimals = true;
 
+        Sheep sheep = new Sheep("Ferdi", 50, 5, 2);
+        Cow cow = new Cow("Susi", 60, 8, 5);
+        Chicken chicken = new Chicken("Klaus", 60, 3, 5);
+
+        farm.setSheep(sheep);
+        farm.setCow(cow);
+        farm.setChicken(chicken);
+
         do {
-            feedAnimal = false;
-            isSheep = false;
-            isCow = false;
-            isChicken = false;
+            farm.isSheep = false;
+            farm.isCow = false;
+            farm.isChicken = false;
             int hunger = 0;
 
-            printHunger();
+            farm.printHunger();
 
             System.out.println("Tier eingeben (Schaf, Kuh oder Huhn):");
             animal = scanner.nextLine();
 
-            hunger = getHungerForAnimal(animal);
+            hunger = farm.getHungerForAnimal(animal);
 
 
             if (isHungry(hunger, animal)) {
-                if (isSheep) {
+                if (farm.isSheep) {
                     hunger -= 20;
-                    hungerSheep = Math.max(hunger, 0);
-                }
-                if (isCow) {
+                    sheep.setHunger(Math.max(hunger, 0));
+                } else if (farm.isCow) {
                     hunger -= 20;
-                    hungerCow = Math.max(hunger, 0);
-                }
-                if (isChicken) {
+                    cow.setHunger(Math.max(hunger, 0));
+                } else if (farm.isChicken) {
                     hunger -= 20;
-                    hungerChicken = Math.max(hunger, 0);
+                    chicken.setHunger(Math.max(hunger, 0));
                 }
             } else {
-                isSheep = false;
-                isCow = false;
-                isChicken = false;
+                farm.isSheep = false;
+                farm.isCow = false;
+                farm.isChicken = false;
             }
 
-            hunger();
+            farm.hunger();
 
-            if (hungerSheep > 100 || hungerCow > 100 || hungerChicken > 100) {
+            if (sheep.getHunger() > 100 || cow.getHunger() > 100 || chicken.getHunger() > 100) {
                 System.out.println("Eines der Tiere ist verhungert");
                 noDeadAnimals = false;
             }
@@ -54,13 +63,7 @@ public class Main {
         scanner.close();
     }
 
-    private static void hunger() {
-        if (!isSheep) hungerSheep += 10;
-        if (!isCow) hungerCow += 10;
-        if (!isChicken) hungerChicken += 10;
-    }
-
-    private static boolean isHungry(int hunger, String animal) {
+    public static boolean isHungry(int hunger, String animal) {
         if (hunger >= 75) {
             System.out.println("Das Tier wird gefüttert");
             return true;
@@ -71,38 +74,5 @@ public class Main {
         }
         System.out.println("Das Tier kann nicht gefüttert werden.");
         return false;
-    }
-
-    private static int getHungerForAnimal(String animal) {
-        int hunger;
-        switch (animal) {
-            case "Schaf" -> {
-                hunger = hungerSheep;
-                isSheep = true;
-                System.out.println("Du hast das Schaf gewählt!");
-            }
-            case "Kuh" -> {
-                hunger = hungerCow;
-                isCow = true;
-                System.out.println("Du hast eine Kuh gewählt!");
-            }
-            case "Huhn" -> {
-                hunger = hungerChicken;
-                isChicken = true;
-                System.out.println("Du hast ein Huhn gewählt!");
-            }
-            default -> {
-                System.out.println("Kein passendes Tier gefunden!");
-                hunger = -1;
-            }
-        }
-        return hunger;
-    }
-
-    private static void printHunger() {
-        System.out.println("Hungerwerte:");
-        System.out.println("Schaf: " + hungerSheep);
-        System.out.println("Kuh: " + hungerCow);
-        System.out.println("Huhn: " + hungerChicken);
     }
 }
