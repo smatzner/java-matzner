@@ -1,6 +1,8 @@
 package animals;
 
-public class Animal {
+import animals.impl.HungerManager;
+
+public class Animal implements HungerManager {
     protected String name;
     protected int hunger, age;
 
@@ -35,5 +37,15 @@ public class Animal {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    @Override
+    public void feed() {
+        this.hunger -= 20;
+    }
+
+    @Override
+    public void hunger() {
+        this.hunger += hungerValue;
     }
 }
