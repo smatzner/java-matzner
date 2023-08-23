@@ -38,13 +38,11 @@ public class Main {
 
             if (isHungry(hunger, animal)) {
                 if (farm.isSheep) {
-                    hunger -= 20;
-                    sheep.setHunger(Math.max(hunger, 0));
+                    sheep.feed();
                 } else if (farm.isCow) {
                     cow.feed();
                 } else if (farm.isChicken) {
-                    hunger -= 20;
-                    chicken.setHunger(Math.max(hunger, 0));
+                    chicken.feed();
                 }
             } else {
                 farm.isSheep = false;

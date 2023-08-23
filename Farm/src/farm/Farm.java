@@ -47,9 +47,10 @@ public class Farm {
     }
 
     public void hunger() {
-        if (!isSheep) sheep.setHunger(sheep.getHunger() + 10);
-        if (!isCow) cow.setHunger(cow.getHunger() + 10);
-        if (!isChicken) chicken.setHunger(chicken.getHunger() + 10);
+//        if (!isSheep) sheep.setHunger(sheep.getHunger() + 10);
+        if (!isSheep) sheep.hunger();
+        if (!isCow) cow.hunger();
+        if (!isChicken) chicken.hunger();
     }
 
     public Chicken getChicken() {
