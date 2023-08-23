@@ -41,8 +41,7 @@ public class Main {
                     hunger -= 20;
                     sheep.setHunger(Math.max(hunger, 0));
                 } else if (farm.isCow) {
-                    hunger -= 20;
-                    cow.setHunger(Math.max(hunger, 0));
+                    cow.feed();
                 } else if (farm.isChicken) {
                     hunger -= 20;
                     chicken.setHunger(Math.max(hunger, 0));

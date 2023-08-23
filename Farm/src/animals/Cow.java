@@ -18,4 +18,10 @@ public class Cow extends Animal {
     public void setMilk(int milk) {
         this.milk = milk;
     }
+
+    @Override
+    public void feed(){
+        setHunger(Math.max(hunger - 10,0));
+        this.milk++;
+    }
 }
