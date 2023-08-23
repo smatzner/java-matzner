@@ -8,6 +8,12 @@ public class Sheep extends Animal {
         this.wool = wool;
     }
 
+    @Override
+    public void feed() {
+        super.feed();
+        wool++;
+    }
+
     public Sheep() {
     }
 
@@ -17,11 +23,5 @@ public class Sheep extends Animal {
 
     public void setWool(int wool) {
         this.wool = wool;
-    }
-
-    @Override
-    public void feed(){
-        super.feed();
-        wool++;
     }
 }

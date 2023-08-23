@@ -15,6 +15,16 @@ public class Animal implements HungerManager {
     public Animal() {
     }
 
+    @Override
+    public void feed() {
+        this.setHunger(Math.max(hunger - 20,0));
+    }
+
+    @Override
+    public void hunger() {
+        this.hunger += hungerValue;
+    }
+
     public String getName() {
         return name;
     }
@@ -39,13 +49,4 @@ public class Animal implements HungerManager {
         this.age = age;
     }
 
-    @Override
-    public void feed() {
-        this.hunger -= 20;
-    }
-
-    @Override
-    public void hunger() {
-        this.hunger += hungerValue;
-    }
 }

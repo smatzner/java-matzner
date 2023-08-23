@@ -36,7 +36,7 @@ public class Main {
             hunger = farm.getHungerForAnimal(animal);
 
 
-            if (isHungry(hunger, animal)) {
+            if (isHungry(hunger)) {
                 if (farm.isSheep) {
                     sheep.feed();
                 } else if (farm.isCow) {
@@ -48,6 +48,7 @@ public class Main {
                 farm.isSheep = false;
                 farm.isCow = false;
                 farm.isChicken = false;
+
             }
 
             farm.hunger();
@@ -60,7 +61,7 @@ public class Main {
         scanner.close();
     }
 
-    public static boolean isHungry(int hunger, String animal) {
+    public static boolean isHungry(int hunger) {
         if (hunger >= 75) {
             System.out.println("Das Tier wird gefüttert");
             return true;
