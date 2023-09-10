@@ -1,8 +1,12 @@
+import animals.Animal;
 import animals.Chicken;
 import animals.Cow;
 import animals.Sheep;
 import farm.Farm;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -11,44 +15,34 @@ public class Main {
 
     public static void main(String[] args) {
         farm = new Farm();
-        String animal;
+        String animalName;
         boolean noDeadAnimals = true;
 
         Sheep sheep = new Sheep("Ferdi", 50, 5, 2);
         Cow cow = new Cow("Susi", 60, 8, 5);
         Chicken chicken = new Chicken("Klaus", 60, 3, 5);
 
-        farm.setSheep(sheep);
-        farm.setCow(cow);
-        farm.setChicken(chicken);
+        List<Animal> animals = new ArrayList<>(Arrays.asList(sheep, cow, chicken));
+
+        farm.setAnimals(animals);
 
         do {
-            farm.isSheep = false;
-            farm.isCow = false;
-            farm.isChicken = false;
             int hunger = 0;
 
             farm.printHunger();
 
-            System.out.println("Tier eingeben (Schaf, Kuh oder Huhn):");
-            animal = scanner.nextLine();
+            System.out.println("Tier eingeben (Namen des Tiers):");
+            animalName = scanner.nextLine();
 
-            hunger = farm.getHungerForAnimal(animal);
+            hunger = farm.getHungerForAnimal(animalName);
 
 
             if (isHungry(hunger)) {
-                if (farm.isSheep) {
-                    sheep.feed();
-                } else if (farm.isCow) {
-                    cow.feed();
-                } else if (farm.isChicken) {
-                    chicken.feed();
-                }
-            } else {
-                farm.isSheep = false;
-                farm.isCow = false;
-                farm.isChicken = false;
-
+                animals.forEach(animal -> {
+                    if(animal.getsFed()) {
+                        animal.feed();
+                    }
+                });
             }
 
             farm.hunger();

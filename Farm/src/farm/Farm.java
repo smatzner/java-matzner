@@ -1,78 +1,54 @@
 package farm;
 
-import animals.Chicken;
-import animals.Cow;
-import animals.Sheep;
+import animals.Animal;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Farm {
-    private Chicken chicken;
-    private Cow cow;
-    private Sheep sheep;
-    public static boolean isSheep, isCow, isChicken;
+    List<Animal> animals = new ArrayList<>();
 
     public Farm() {
     }
 
     public void printHunger() {
         System.out.println("Hungerwerte:");
-        System.out.println("Schaf: " + sheep.getHunger());
-        System.out.println("Kuh: " + cow.getHunger());
-        System.out.println("Huhn: " + chicken.getHunger());
+        animals.forEach(animal -> System.out.println(animal.getName() + " (" + animal + "): " + animal.getHunger()));
     }
 
     public int getHungerForAnimal(String animal) {
-        int hunger;
-        switch (animal) {
-            case "Schaf" -> {
-                hunger = sheep.getHunger();
-                isSheep = true;
-                System.out.println("Du hast das Schaf gewählt!");
-            }
-            case "Kuh" -> {
-                hunger = cow.getHunger();
-                isCow = true;
-                System.out.println("Du hast eine Kuh gewählt!");
-            }
-            case "Huhn" -> {
-                hunger = chicken.getHunger();
-                isChicken = true;
-                System.out.println("Du hast ein Huhn gewählt!");
-            }
-            default -> {
-                System.out.println("Kein passendes Tier gefunden!");
-                hunger = -1;
+        int hunger = -1;
+
+        for (Animal selectedAnimal : animals) {
+            if (selectedAnimal.getName().equals(animal)) {
+                hunger = selectedAnimal.getHunger();
+                selectedAnimal.setGetsFed(true);
+                System.out.println("Du hast " + selectedAnimal.getName() + " gewählt!");
+                break;
             }
         }
+
+        if(hunger == -1){
+            System.out.println("Kein passendes Tier gefunden!");
+        }
+
         return hunger;
     }
 
     public void hunger() {
-        if (!isSheep) sheep.hunger();
-        if (!isCow) cow.hunger();
-        if (!isChicken) chicken.hunger();
+        animals.forEach(animal -> {
+            if (!animal.getsFed()) {
+                animal.hunger();
+            }
+            animal.setGetsFed(false);
+        });
     }
 
-    public Chicken getChicken() {
-        return chicken;
+    public List<Animal> getAnimals() {
+        return animals;
     }
 
-    public void setChicken(Chicken chicken) {
-        this.chicken = chicken;
-    }
-
-    public Cow getCow() {
-        return cow;
-    }
-
-    public void setCow(Cow cow) {
-        this.cow = cow;
-    }
-
-    public Sheep getSheep() {
-        return sheep;
-    }
-
-    public void setSheep(Sheep sheep) {
-        this.sheep = sheep;
+    public void setAnimals(List<Animal> animals) {
+        this.animals = animals;
     }
 }

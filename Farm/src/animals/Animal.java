@@ -5,6 +5,7 @@ import animals.impl.HungerManager;
 public class Animal implements HungerManager {
     protected String name;
     protected int hunger, age;
+    protected boolean getsFed;
 
     public Animal(String name, int hunger, int age) {
         this.name = name;
@@ -49,4 +50,16 @@ public class Animal implements HungerManager {
         this.age = age;
     }
 
+    public boolean getsFed() {
+        return getsFed;
+    }
+
+    public void setGetsFed(boolean getsFed) {
+        this.getsFed = getsFed;
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
 }
