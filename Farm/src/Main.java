@@ -31,15 +31,15 @@ public class Main {
 
             farm.printHunger();
 
-            System.out.println("Tier eingeben (Namen des Tiers):");
+            System.out.println("Tier oder Tiergruppe eingeben: (Namen des Tiers / Schafe, Kühe, Hühner / Alle)");
             animalName = scanner.nextLine();
 
             hunger = farm.getHungerForAnimal(animalName);
 
-
             if (isHungry(hunger)) {
+                System.out.println("Fütterung ...");
                 animals.forEach(animal -> {
-                    if(animal.getsFed()) {
+                    if (animal.getsFed()) {
                         animal.feed();
                     }
                 });
@@ -57,7 +57,6 @@ public class Main {
 
     public static boolean isHungry(int hunger) {
         if (hunger >= 75) {
-            System.out.println("Das Tier wird gefüttert");
             return true;
         } else if (hunger >= 50) {
             System.out.println("Soll das Tier gefüttert werden? (J/N)");

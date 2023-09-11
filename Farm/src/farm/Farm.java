@@ -2,11 +2,12 @@ package farm;
 
 import animals.Animal;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Farm {
-    List<Animal> animals = new ArrayList<>();
+    private List<Animal> animals = new ArrayList<>();
 
     public Farm() {
     }
@@ -28,8 +29,45 @@ public class Farm {
             }
         }
 
-        if(hunger == -1){
+        hunger = selectAnimalGroup(animal,hunger);
+
+        if (hunger == -1) {
             System.out.println("Kein passendes Tier gefunden!");
+        }
+
+        return hunger;
+    }
+
+    private int selectAnimalGroup(String animalGroup, int hunger) {
+        switch (animalGroup.toLowerCase()) {
+            case "schafe" -> {
+                System.out.println("Alle " + animalGroup + " werden gefüttert");
+                animalGroup = "Sheep";
+            }
+            case "kühe" -> {
+                System.out.println("Alle " + animalGroup + " werden gefüttert");
+                animalGroup = "Cow";
+            }
+            case "hühner" -> {
+                System.out.println("Alle " + animalGroup + " werden gefüttert");
+                animalGroup = "Chicken";
+            }
+            case "alle" -> {
+                System.out.println("Alle Tiere weden gefüttert");
+                animalGroup = "all";
+            }
+        }
+
+        for (Animal animal : animals){
+            if(animalGroup.equals("all")) {
+                hunger = 100;
+                animal.setGetsFed(true);
+                continue;
+            }
+            if(animal.getClass().getSimpleName().equals(animalGroup)){
+                hunger = 100;
+                animal.setGetsFed(true);
+            }
         }
 
         return hunger;

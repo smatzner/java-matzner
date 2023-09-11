@@ -18,7 +18,7 @@ public class Animal implements HungerManager {
 
     @Override
     public void feed() {
-        this.setHunger(Math.max(hunger - 20,0));
+        this.setHunger(Math.max(hunger - 20, 0));
     }
 
     @Override
