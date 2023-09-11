@@ -114,19 +114,15 @@ public class Farm {
                 case "Sheep" -> {
                     int wool = ((Sheep) animal).getWool();
                     System.out.println(animal.getName() + "(Schaf): " + wool + "kg Wolle");
-                    return;
                 }
                 case "Cow" -> {
                     int milk = ((Cow) animal).getMilk();
                     System.out.println(animal.getName() + "(Kuh): " + milk + "l Milch");
-                    return;
                 }
                 case "Chicken" -> {
                     int eggs = ((Chicken) animal).getEggs();
                     System.out.println(animal.getName() + "(Huhn): " + eggs + "Stück Eier");
-                    return;
                 }
-
             }
         }
     }
@@ -134,20 +130,12 @@ public class Farm {
     private void collectYield(){
         System.out.println("Von welchem Tier wollen Sie die Ressource einsammeln?");
         String animalInput = sc.nextLine();
-        Animal animal = animals.stream().filter(animal1 -> animal1.getName().equals(animalInput)).findFirst().orElse(null);
-        switch (animal.getClass().getSimpleName()){
-            case "Sheep" -> {
-                System.out.println(((Sheep)animal).getWool() + "kg Wolle eingesammelt");
-                ((Sheep)animal).setWool(0);
-            }
-            case "Cow" -> {
-                System.out.println(((Cow)animal).getMilk() + "l Milch eingesammelt");
-                ((Cow)animal).setMilk(0);
-            }
-            case "Chicken" -> {
-                System.out.println(((Chicken)animal).getEggs() + " Eier eingesammelt");
-                ((Chicken)animal).setEggs(0);
-            }
+        Animal animal = animals.stream().filter(selectedAnimal -> selectedAnimal.getName().equals(animalInput)).findFirst().orElse(null);
+
+        if(animal != null){
+            animal.collectYield();
+        } else {
+            System.out.println("Tier nicht gefunden");
         }
     }
 

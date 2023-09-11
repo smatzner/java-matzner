@@ -11,17 +11,23 @@ public class Cow extends Animal {
     public Cow() {
     }
 
+    @Override
+    public void feed(){
+        setHunger(Math.max(hunger - 10,0));
+        this.milk++;
+    }
+
+    @Override
+    public void collectYield() {
+        System.out.println(getMilk() + "l Milch eingesammelt.");
+        setMilk(0);
+    }
+
     public int getMilk() {
         return milk;
     }
 
     public void setMilk(int milk) {
         this.milk = milk;
-    }
-
-    @Override
-    public void feed(){
-        setHunger(Math.max(hunger - 10,0));
-        this.milk++;
     }
 }

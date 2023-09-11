@@ -8,13 +8,19 @@ public class Sheep extends Animal {
         this.wool = wool;
     }
 
+    public Sheep() {
+    }
+
     @Override
     public void feed() {
         super.feed();
         wool++;
     }
 
-    public Sheep() {
+    @Override
+    public void collectYield() {
+        System.out.println(getWool() + " kg Wolle eingesammelt.");
+        setWool(0);
     }
 
     public int getWool() {

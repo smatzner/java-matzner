@@ -11,6 +11,17 @@ public class Chicken extends Animal {
     public Chicken() {
     }
 
+    @Override
+    public void printYield() {
+
+    }
+
+    @Override
+    public void collectYield() {
+        System.out.println(getEggs() + "Eier eingesammelt");
+        setEggs(0);
+    }
+
     public int getEggs() {
         return eggs;
     }
@@ -18,4 +29,5 @@ public class Chicken extends Animal {
     public void setEggs(int eggs) {
         this.eggs = eggs;
     }
+
 }

@@ -26,6 +26,14 @@ public class Animal implements HungerManager {
         this.hunger += hungerValue;
     }
 
+    public String getAnimalType(){
+        return null;
+    }
+
+    public void printYield(){}
+
+    public void collectYield(){}
+
     public String getName() {
         return name;
     }
