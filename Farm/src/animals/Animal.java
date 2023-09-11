@@ -50,6 +50,10 @@ public class Animal implements HungerManager {
         this.age = age;
     }
 
+    public void increaseAge(){
+        this.age++;
+    }
+
     public boolean getsFed() {
         return getsFed;
     }
