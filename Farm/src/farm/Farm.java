@@ -1,60 +1,119 @@
 package farm;
 
 import animals.Animal;
+import animals.Chicken;
+import animals.Cow;
+import animals.Sheep;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Farm {
+    private static final List<String> gameModes = new ArrayList<>(Arrays.asList("Tiere füttern","neues Tier erstellen"));
     private List<Animal> animals = new ArrayList<>();
     private Scanner sc = new Scanner(System.in);
-    private int hunger, roundCounter = 1;
-    private boolean noDeadAnimals = true;
+    private static int roundCounter = 1;
+    private static boolean noDeadAnimals = true;
+    private static int hunger;
 
     public Farm() {
     }
 
     public void run(){
-        String animal;
-        boolean noDeadAnimals = true;
         do {
-            hunger = 0;
-
             printRoundNumber();
 
             printHunger();
 
-            System.out.println("Tier oder Tiergruppe eingeben: (Name des Tieres / Schafe, Kühe, Hühner / Alle)");
-            animal = sc.nextLine();
+            selectGameMode();
 
-            hunger = getHungerForAnimal(animal);
-
-            feed(hunger);
+            increaseRoundCounter();
 
             hunger();
-
-            increaseAge();
 
             setNoDeadAnimals();
 
         } while (noDeadAnimals);
     }
 
-    public void printRoundNumber(){
+    private void printRoundNumber(){
         System.out.println(roundCounter + ". Runde");
     }
 
-    public void printHunger() {
+    private void selectGameMode(){
+        while(true){
+            System.out.println("Modus wählen");
+            int gameModeIndex = 0;
+            for (String gameMode : gameModes) {
+                System.out.println("(" + gameModeIndex + ") = " + gameMode);
+                gameModeIndex++;
+            }
+            String mode = sc.nextLine();
+            switch (mode) {
+                case "0" -> {
+                    System.out.println(gameModes.get(0) + " gewählt");
+                    feedAnimals();
+                    return;
+                }
+                case "1" -> {
+                    System.out.println(gameModes.get(1) + " gewählt");
+                    createNewAnimal();
+                    return;
+                }
+                default -> {
+                    System.out.println("Inkorrekter Modus.");
+                }
+            }
+        }
+    }
+
+    private void createNewAnimal() {
+        System.out.println("Tierart eingeben: (Schaf / Kuh / Huhn");
+        String animalType = sc.nextLine();
+        String animalName;
+        int animalAge;
+
+        while (true) {
+            System.out.println("Namen des Tieres eingeben:");
+            String name = sc.nextLine();
+            if (animals.stream().anyMatch(animal -> animal.getName().equals(name))) {
+                System.out.println(name + " bereits vorhanden. Bitte einen anderen Namen wählen");
+                continue;
+            }
+            animalName = name;
+            break;
+        }
+
+        System.out.println("Alter des Tieres eingeben:");
+        animalAge = Integer.parseInt(sc.nextLine());
+
+        switch (animalType) {
+            case "Schaf" -> animals.add(new Sheep(animalName,50,animalAge,0));
+            case "Kuh" -> animals.add(new Cow(animalName,50,animalAge,0));
+            case "Huhn" -> animals.add(new Chicken(animalName,50,animalAge,0));
+        }
+    }
+
+    private void feedAnimals(){
+        String animal;
+
+        System.out.println("Tier oder Tiergruppe eingeben: (Name des Tieres / Schafe, Kühe, Hühner / Alle)");
+        animal = sc.nextLine();
+
+        hunger = getHungerForAnimal(animal);
+
+        feed(hunger);
+    }
+
+    private void printHunger() {
         System.out.println("Hungerwerte:");
         animals.forEach(animal -> System.out.println(animal.getName() + ": " + animal.getHunger()));
     }
 
-    public int getHungerForAnimal(String animal) {
+    private int getHungerForAnimal(String animal) {
         int hunger = -1;
 
         for (Animal selectedAnimal : animals) {
-            if (selectedAnimal.getName().equals(animal)) {
+            if (selectedAnimal.getName().equalsIgnoreCase(animal)) {
                 hunger = selectedAnimal.getHunger();
                 selectedAnimal.setGetsFed(true);
                 System.out.println("Du hast " + selectedAnimal.getName() + " gewählt!");
@@ -129,7 +188,7 @@ public class Farm {
         return hunger;
     }
 
-    public void hunger() {
+    private void hunger() {
         animals.forEach(animal -> {
             if (!animal.getsFed()) {
                 animal.hunger();
@@ -138,7 +197,7 @@ public class Farm {
         });
     }
 
-    protected void increaseAge(){
+    private void increaseRoundCounter(){
         if(roundCounter % 3 == 0){
             animals.forEach(animal -> {
                 animal.increaseAge();
@@ -156,13 +215,13 @@ public class Farm {
         this.animals = animals;
     }
 
-    public boolean setNoDeadAnimals() {
+    private void setNoDeadAnimals() {
         for (Animal animal : animals){
-            if(animal.getHunger() > 100){
-                System.out.println("Eines der Tiere ist verhungert!");
+            if(animal.getHunger() >= 100){
+                System.out.println("Eines der Tiere ist verhungert. Game Over!");
                 noDeadAnimals = false;
+                break;
             }
         }
-        return noDeadAnimals;
     }
 }
