@@ -2,10 +2,11 @@ package animals;
 
 import animals.impl.HungerManager;
 
-public class Animal implements HungerManager {
+public abstract class Animal implements HungerManager {
     protected String name;
     protected int hunger, age;
     protected boolean getsFed;
+    protected boolean isAlive;
 
     public Animal(String name, int hunger, int age) {
         this.name = name;
@@ -26,13 +27,11 @@ public class Animal implements HungerManager {
         this.hunger += hungerValue;
     }
 
-    public String getAnimalType(){
-        return null;
-    }
+    public abstract String getAnimalType();
 
-    public void printYield(){}
+    public abstract void printYield();
 
-    public void collectYield(){}
+    public abstract void collectYield();
 
     public String getName() {
         return name;
@@ -68,6 +67,18 @@ public class Animal implements HungerManager {
 
     public void setGetsFed(boolean getsFed) {
         this.getsFed = getsFed;
+    }
+
+    public boolean isGetsFed() {
+        return getsFed;
+    }
+
+    public boolean isAlive() {
+        return isAlive;
+    }
+
+    public void setAlive(boolean alive) {
+        isAlive = alive;
     }
 
     @Override

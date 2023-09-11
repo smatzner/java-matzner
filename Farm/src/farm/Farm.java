@@ -1,9 +1,6 @@
 package farm;
 
-import animals.Animal;
-import animals.Chicken;
-import animals.Cow;
-import animals.Sheep;
+import animals.*;
 
 import java.util.*;
 
@@ -89,6 +86,7 @@ public class Farm {
             case "Schaf" -> animals.add(new Sheep(animalName, 50, animalAge, 0));
             case "Kuh" -> animals.add(new Cow(animalName, 50, animalAge, 0));
             case "Huhn" -> animals.add(new Chicken(animalName, 50, animalAge, 0));
+            case "Schwein" -> animals.add(new Pig(animalName,50,animalAge,0));
         }
     }
 
@@ -110,30 +108,20 @@ public class Farm {
 
     private void printYield() {
         for (Animal animal : animals) {
-            switch (animal.getClass().getSimpleName()) {
-                case "Sheep" -> {
-                    int wool = ((Sheep) animal).getWool();
-                    System.out.println(animal.getName() + "(Schaf): " + wool + "kg Wolle");
-                }
-                case "Cow" -> {
-                    int milk = ((Cow) animal).getMilk();
-                    System.out.println(animal.getName() + "(Kuh): " + milk + "l Milch");
-                }
-                case "Chicken" -> {
-                    int eggs = ((Chicken) animal).getEggs();
-                    System.out.println(animal.getName() + "(Huhn): " + eggs + "Stück Eier");
-                }
-            }
+            animal.printYield();
         }
     }
 
-    private void collectYield(){
+    private void collectYield() {
         System.out.println("Von welchem Tier wollen Sie die Ressource einsammeln?");
         String animalInput = sc.nextLine();
-        Animal animal = animals.stream().filter(selectedAnimal -> selectedAnimal.getName().equals(animalInput)).findFirst().orElse(null);
+        Animal animal = animals.stream().filter(selectedAnimal -> selectedAnimal.getName().equalsIgnoreCase(animalInput)).findFirst().orElse(null);
 
-        if(animal != null){
+        if (animal != null) {
             animal.collectYield();
+            if(!animal.isAlive()){
+                animals.remove(animal);
+            }
         } else {
             System.out.println("Tier nicht gefunden");
         }
@@ -192,29 +180,32 @@ public class Farm {
         switch (animalGroup.toLowerCase()) {
             case "schafe" -> {
                 System.out.println("Alle " + animalGroup + " werden gefüttert");
-                animalGroup = "Sheep";
+                animalGroup = "Schaf";
             }
             case "kühe" -> {
                 System.out.println("Alle " + animalGroup + " werden gefüttert");
-                animalGroup = "Cow";
+                animalGroup = "Kuh";
             }
             case "hühner" -> {
                 System.out.println("Alle " + animalGroup + " werden gefüttert");
-                animalGroup = "Chicken";
+                animalGroup = "Huhn";
+            }
+            case "schweine" -> {
+                System.out.println("Alle " + animalGroup + " werden gefüttert");
+                animalGroup = "Schwein";
             }
             case "alle" -> {
                 System.out.println("Alle Tiere weden gefüttert");
-                animalGroup = "all";
             }
         }
 
         for (Animal animal : animals) {
-            if (animalGroup.equals("all")) {
+            if (animalGroup.equals("alle")) {
                 hunger = 100;
                 animal.setGetsFed(true);
                 continue;
             }
-            if (animal.getClass().getSimpleName().equals(animalGroup)) {
+            if (animal.getAnimalType().equals(animalGroup)) {
                 hunger = 100;
                 animal.setGetsFed(true);
             }
@@ -234,9 +225,7 @@ public class Farm {
 
     private void increaseRoundCounter() {
         if (roundCounter % 3 == 0) {
-            animals.forEach(animal -> {
-                animal.increaseAge();
-            });
+            animals.forEach(Animal::increaseAge);
         }
 
         roundCounter++;

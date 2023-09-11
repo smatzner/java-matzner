@@ -18,6 +18,16 @@ public class Sheep extends Animal {
     }
 
     @Override
+    public String getAnimalType() {
+        return "Schaf";
+    }
+
+    @Override
+    public void printYield() {
+        System.out.println(getName() + " (" + getAnimalType() + "): " + getWool() + " kg Wolle.");
+    }
+
+    @Override
     public void collectYield() {
         System.out.println(getWool() + " kg Wolle eingesammelt.");
         setWool(0);
