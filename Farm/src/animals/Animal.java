@@ -8,7 +8,7 @@ public abstract class Animal implements HungerManager{
     protected String name;
     protected int hunger, age;
     protected boolean getsFed;
-    protected boolean isAlive;
+    protected boolean isAlive = true;
 
     public Animal(String name, int hunger, int age) {
         this.name = name;
@@ -79,12 +79,12 @@ public abstract class Animal implements HungerManager{
         return getsFed;
     }
 
-    public boolean isAlive() {
-        return isAlive;
-    }
-
     public void setAlive(boolean alive) {
         isAlive = alive;
+    }
+
+    public boolean isAlive() {
+        return isAlive;
     }
 
     @Override

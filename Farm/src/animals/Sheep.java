@@ -36,7 +36,7 @@ public class Sheep extends Animal {
 
     @Override
     public void printYield() {
-        System.out.println(getName() + " (" + getAnimalType() + "): " + getWool() + " kg Wolle.");
+        System.out.println(getName() + " (" + getAnimalType().get("sing") + "): " + getWool() + " kg Wolle.");
     }
 
     @Override

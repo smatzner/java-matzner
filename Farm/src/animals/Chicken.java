@@ -36,12 +36,12 @@ public class Chicken extends Animal {
 
     @Override
     public void printYield() {
-        System.out.println(getName() + " (" + getAnimalType() + "): " + getEggs() + " Stück Eier.");
+        System.out.println(getName() + " (" + getAnimalType().get("sing") + "): " + getEggs() + " Stück Eier.");
     }
 
     @Override
     public void collectYield() {
-        System.out.println(getEggs() + "Eier eingesammelt.");
+        System.out.println(getEggs() + " Eier eingesammelt.");
         setEggs(0);
     }
 

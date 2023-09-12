@@ -38,7 +38,7 @@ public class Pig extends Animal{
 
     @Override
     public void printYield() {
-        System.out.println(getName() + " (" + getAnimalType() + "): " + getBacon() + " kg Speck.");
+        System.out.println(getName() + " (" + getAnimalType().get("sing") + "): " + getBacon() + " kg Speck.");
     }
 
     @Override

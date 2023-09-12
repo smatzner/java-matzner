@@ -36,7 +36,7 @@ public class Cow extends Animal {
 
     @Override
     public void printYield() {
-        System.out.println(getName() + " (" + getAnimalType() + "): " + getMilk() + " Liter Milch.");
+        System.out.println(getName() + " (" + getAnimalType().get("sing") + "): " + getMilk() + " Liter Milch.");
     }
 
     @Override
