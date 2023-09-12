@@ -2,7 +2,9 @@ package animals;
 
 import animals.impl.HungerManager;
 
-public abstract class Animal implements HungerManager {
+import java.util.Map;
+
+public abstract class Animal implements HungerManager{
     protected String name;
     protected int hunger, age;
     protected boolean getsFed;
@@ -23,11 +25,15 @@ public abstract class Animal implements HungerManager {
     }
 
     @Override
-    public void hunger() {
+    public void increaseHunger() {
         this.hunger += hungerValue;
     }
 
-    public abstract String getAnimalType();
+    public abstract Map<String, String> getAnimalType();
+
+    public abstract String getResourceType();
+
+    public abstract int getYield();
 
     public abstract void printYield();
 

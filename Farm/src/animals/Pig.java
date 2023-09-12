@@ -1,5 +1,6 @@
 package animals;
 
+import java.util.Map;
 import java.util.Scanner;
 
 public class Pig extends Animal{
@@ -21,8 +22,18 @@ public class Pig extends Animal{
     }
 
     @Override
-    public String getAnimalType() {
-        return "Schwein";
+    public Map<String, String> getAnimalType() {
+        return AnimalType.PIG.getAnimalTypeLabels();
+    }
+
+    @Override
+    public String getResourceType() {
+        return ResourceType.BACON.getResourceType();
+    }
+
+    @Override
+    public int getYield() {
+        return bacon;
     }
 
     @Override
@@ -35,9 +46,7 @@ public class Pig extends Animal{
         System.out.println(getName() + " zur Schlachtung freigeben? (J/N)");
         String slaughter = sc.nextLine();
         if(slaughter.equalsIgnoreCase("J")){
-            System.out.println(getName() + " wird geschlachtet.");
-            System.out.println(getBacon() + "kg Speck eingesammelt.");
-            setAlive(false);
+            slaughter();
         } else {
             System.out.println(getName() + " wird nicht geschlachtet.");
         }
@@ -49,5 +58,11 @@ public class Pig extends Animal{
 
     public void setBacon(int bacon) {
         this.bacon = bacon;
+    }
+
+    private void slaughter(){
+        System.out.println(getName() + " wird geschlachtet.");
+        System.out.println(getBacon() + "kg Speck eingesammelt.");
+        setAlive(false);
     }
 }

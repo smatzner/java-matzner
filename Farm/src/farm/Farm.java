@@ -11,33 +11,54 @@ public class Farm {
     private static int roundCounter = 1;
     private static boolean noDeadAnimals = true;
     private static int hunger;
+    private static boolean isAnimalGroup = false;
 
     public Farm() {
     }
 
     public void run() {
+        System.out.println("----------------------------");
+        System.out.println("|  Welcome to Animal Farm  |");
         do {
             printRoundNumber();
-            printHunger();
+            printAnimals();
             selectGameMode();
             increaseRoundCounter();
-            hunger();
+            increaseHunger();
             setNoDeadAnimals();
         } while (noDeadAnimals);
     }
 
     private void printRoundNumber() {
+        resetAnimalGroup();
+        System.out.println("----------------------------");
         System.out.println(roundCounter + ". Runde");
+        System.out.println("----------------------------");
+    }
+
+    private void printAnimals() {
+        System.out.println(animals.size() + " Tiere leben auf der Farm");
+        System.out.println("----------------------------");
+        animals.forEach(animal -> {
+            System.out.print(animal.getName());
+            System.out.print(" (" + animal.getAnimalType().get("sing") + ") // ");
+            System.out.print("Alter (" + animal.getAge() + ") // ");
+            System.out.print("Hunger (" + animal.getHunger() + ") // ");
+            System.out.println(animal.getResourceType() + " (" + animal.getYield() + ")");
+        });
     }
 
     private void selectGameMode() {
         while (true) {
-            System.out.println("Modus wählen");
+            System.out.println("----------------------------");
+            System.out.println("Spielmodus wählen");
+            System.out.println("----------------------------");
             int gameModeIndex = 0;
             for (String gameMode : gameModes) {
                 System.out.println("(" + gameModeIndex + ") = " + gameMode);
                 gameModeIndex++;
             }
+            System.out.println("----------------------------");
             String mode = sc.nextLine();
             switch (mode) {
                 case "0" -> {
@@ -60,6 +81,107 @@ public class Farm {
                 }
             }
         }
+    }
+    private void feedAnimals() {
+        String userInput;
+        System.out.println("Tier oder Tiergruppe eingeben: (Name des Tieres / Schafe, Kühe, Hühner / Alle)");
+        System.out.println("----------------------------");
+        userInput = sc.nextLine();
+
+        hunger = getHungerForAnimal(userInput);
+
+        feed(hunger);
+    }
+
+    private int getHungerForAnimal(String userInput) {
+        int hunger = -1;
+
+        if(isAnimalGroup(userInput)){
+            hunger = 100;
+            for (Animal animal : animals){
+                if(animal.getHunger() < hunger){
+                    hunger = animal.getHunger();
+                }
+            }
+            isAnimalGroup = true;
+            return hunger;
+        }
+
+        for (Animal animal : animals) {
+            if (animal.getName().equalsIgnoreCase(userInput)) {
+                hunger = animal.getHunger();
+                animal.setGetsFed(true);
+                System.out.println("Du hast " + animal.getName() + " gewählt!");
+                break;
+            }
+        }
+
+        if (hunger == -1) {
+            System.out.println("Kein passendes Tier gefunden!");
+        }
+
+        return hunger;
+    }
+
+    private boolean isHungry(int hunger) {
+        String feedAnimalInput;
+
+        if(isAnimalGroup){
+            if(hunger <= 75){
+                System.out.println("Eines oder mehrere Tiere sind noch nicht besonders hungrig. Sollen trotzdem alle gewählten Tiere gefüttert werden? (J/N)");
+                feedAnimalInput = sc.nextLine();
+                if(!feedAnimalInput.equalsIgnoreCase("j")){
+                    animals.forEach(animal -> animal.setGetsFed(false));
+                    return false;
+                }
+                return true;
+            }
+        }
+        if (hunger >= 75) {
+            return true;
+        } else if (hunger >= 50) {
+            System.out.println("Soll das Tier gefüttert werden? (J/N)");
+            feedAnimalInput = sc.nextLine();
+            return feedAnimalInput.equalsIgnoreCase("j");
+        }
+        System.out.println("Das Tier kann nicht gefüttert werden.");
+        return false;
+    }
+
+    private void feed(int hunger) {
+        if (isHungry(hunger)) {
+            System.out.println("Fütterung ...");
+            animals.forEach(animal -> {
+                if (animal.getsFed()) {
+                    animal.feed();
+                }
+            });
+        }
+    }
+
+    private boolean isAnimalGroup(String animalGroup) {
+        if(animalGroup.equalsIgnoreCase("alle")) {
+            animals.forEach(animal -> animal.setGetsFed(true));
+            return true;
+        }
+
+        for( Animal animal : animals){
+            if(animal.getAnimalType().get("plur").equalsIgnoreCase(animalGroup)){
+                animal.setGetsFed(true);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void increaseHunger() {
+        animals.forEach(animal -> {
+            if (!animal.getsFed()) {
+                animal.increaseHunger();
+            }
+            animal.setGetsFed(false);
+        });
     }
 
     private void createNewAnimal() {
@@ -86,19 +208,8 @@ public class Farm {
             case "Schaf" -> animals.add(new Sheep(animalName, 50, animalAge, 0));
             case "Kuh" -> animals.add(new Cow(animalName, 50, animalAge, 0));
             case "Huhn" -> animals.add(new Chicken(animalName, 50, animalAge, 0));
-            case "Schwein" -> animals.add(new Pig(animalName,50,animalAge,0));
+            case "Schwein" -> animals.add(new Pig(animalName, 50, animalAge, 0));
         }
-    }
-
-    private void feedAnimals() {
-        String animal;
-
-        System.out.println("Tier oder Tiergruppe eingeben: (Name des Tieres / Schafe, Kühe, Hühner / Alle)");
-        animal = sc.nextLine();
-
-        hunger = getHungerForAnimal(animal);
-
-        feed(hunger);
     }
 
     private void collectResources() {
@@ -119,108 +230,12 @@ public class Farm {
 
         if (animal != null) {
             animal.collectYield();
-            if(!animal.isAlive()){
+            if (!animal.isAlive()) {
                 animals.remove(animal);
             }
         } else {
             System.out.println("Tier nicht gefunden");
         }
-    }
-
-    private void printHunger() {
-        System.out.println("Hungerwerte:");
-        animals.forEach(animal -> System.out.println(animal.getName() + ": " + animal.getHunger()));
-    }
-
-    private int getHungerForAnimal(String animal) {
-        int hunger = -1;
-
-        for (Animal selectedAnimal : animals) {
-            if (selectedAnimal.getName().equalsIgnoreCase(animal)) {
-                hunger = selectedAnimal.getHunger();
-                selectedAnimal.setGetsFed(true);
-                System.out.println("Du hast " + selectedAnimal.getName() + " gewählt!");
-                break;
-            }
-        }
-
-        hunger = selectAnimalGroup(animal, hunger);
-
-        if (hunger == -1) {
-            System.out.println("Kein passendes Tier gefunden!");
-        }
-
-        return hunger;
-    }
-
-    private boolean isHungry(int hunger) {
-        if (hunger >= 75) {
-            return true;
-        } else if (hunger >= 50) {
-            System.out.println("Soll das Tier gefüttert werden? (J/N)");
-            String feedAnimalInput = sc.nextLine();
-            return feedAnimalInput.equalsIgnoreCase("j");
-        }
-        System.out.println("Das Tier kann nicht gefüttert werden.");
-        return false;
-    }
-
-    private void feed(int hunger) {
-        if (isHungry(hunger)) {
-            System.out.println("Fütterung ...");
-            animals.forEach(animal -> {
-                if (animal.getsFed()) {
-                    animal.feed();
-                }
-            });
-        }
-    }
-
-    private int selectAnimalGroup(String animalGroup, int hunger) {
-        switch (animalGroup.toLowerCase()) {
-            case "schafe" -> {
-                System.out.println("Alle " + animalGroup + " werden gefüttert");
-                animalGroup = "Schaf";
-            }
-            case "kühe" -> {
-                System.out.println("Alle " + animalGroup + " werden gefüttert");
-                animalGroup = "Kuh";
-            }
-            case "hühner" -> {
-                System.out.println("Alle " + animalGroup + " werden gefüttert");
-                animalGroup = "Huhn";
-            }
-            case "schweine" -> {
-                System.out.println("Alle " + animalGroup + " werden gefüttert");
-                animalGroup = "Schwein";
-            }
-            case "alle" -> {
-                System.out.println("Alle Tiere weden gefüttert");
-            }
-        }
-
-        for (Animal animal : animals) {
-            if (animalGroup.equals("alle")) {
-                hunger = 100;
-                animal.setGetsFed(true);
-                continue;
-            }
-            if (animal.getAnimalType().equals(animalGroup)) {
-                hunger = 100;
-                animal.setGetsFed(true);
-            }
-        }
-
-        return hunger;
-    }
-
-    private void hunger() {
-        animals.forEach(animal -> {
-            if (!animal.getsFed()) {
-                animal.hunger();
-            }
-            animal.setGetsFed(false);
-        });
     }
 
     private void increaseRoundCounter() {
@@ -229,6 +244,10 @@ public class Farm {
         }
 
         roundCounter++;
+    }
+
+    private void resetAnimalGroup(){
+        isAnimalGroup = false;
     }
 
     public List<Animal> getAnimals() {

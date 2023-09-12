@@ -12,8 +12,8 @@ public class Main {
         Sheep sheep = new Sheep("Ferdi", 50, 5, 2);
         Cow cow = new Cow("Susi", 60, 8, 5);
         Chicken chicken = new Chicken("Klaus", 60, 3, 5);
-        Pig pig = new Pig("Basti",70,3,0);
 
+        Pig pig = new Pig("Basti",70,3,0);
         List<Animal> animals = new ArrayList<>(Arrays.asList(sheep, cow, chicken, pig));
 
         farm.setAnimals(animals);

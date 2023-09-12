@@ -5,5 +5,5 @@ public interface HungerManager {
 
     void  feed();
 
-    void hunger();
+    void increaseHunger();
 }

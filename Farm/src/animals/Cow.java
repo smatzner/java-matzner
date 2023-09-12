@@ -1,5 +1,7 @@
 package animals;
 
+import java.util.Map;
+
 public class Cow extends Animal {
     private int milk;
 
@@ -18,8 +20,18 @@ public class Cow extends Animal {
     }
 
     @Override
-    public String getAnimalType() {
-        return "Kuh";
+    public Map<String, String> getAnimalType() {
+        return AnimalType.COW.getAnimalTypeLabels();
+    }
+
+    @Override
+    public String getResourceType() {
+        return ResourceType.MILK.getResourceType();
+    }
+
+    @Override
+    public int getYield() {
+        return milk;
     }
 
     @Override
