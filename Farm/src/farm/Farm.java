@@ -82,6 +82,7 @@ public class Farm {
             }
         }
     }
+
     private void feedAnimals() {
         String userInput;
         System.out.println("Tier oder Tiergruppe eingeben: (Name des Tieres / Schafe, Kühe, Hühner / Alle)");
@@ -96,10 +97,10 @@ public class Farm {
     private int getHungerForAnimal(String userInput) {
         int hunger = -1;
 
-        if(isAnimalGroup(userInput)){
+        if (isAnimalGroup(userInput)) {
             hunger = 100;
-            for (Animal animal : animals){
-                if(animal.getHunger() < hunger){
+            for (Animal animal : animals) {
+                if (animal.getHunger() < hunger) {
                     hunger = animal.getHunger();
                 }
             }
@@ -126,11 +127,11 @@ public class Farm {
     private boolean isHungry(int hunger) {
         String feedAnimalInput;
 
-        if(isAnimalGroup){
-            if(hunger <= 75){
+        if (isAnimalGroup) {
+            if (hunger <= 75) {
                 System.out.println("Eines oder mehrere Tiere sind noch nicht besonders hungrig. Sollen trotzdem alle gewählten Tiere gefüttert werden? (J/N)");
                 feedAnimalInput = sc.nextLine();
-                if(!feedAnimalInput.equalsIgnoreCase("j")){
+                if (!feedAnimalInput.equalsIgnoreCase("j")) {
                     animals.forEach(animal -> animal.setGetsFed(false));
                     return false;
                 }
@@ -160,13 +161,13 @@ public class Farm {
     }
 
     private boolean isAnimalGroup(String animalGroup) {
-        if(animalGroup.equalsIgnoreCase("alle")) {
+        if (animalGroup.equalsIgnoreCase("alle")) {
             animals.forEach(animal -> animal.setGetsFed(true));
             return true;
         }
 
-        for( Animal animal : animals){
-            if(animal.getAnimalType().get("plur").equalsIgnoreCase(animalGroup)){
+        for (Animal animal : animals) {
+            if (animal.getAnimalType().get("plur").equalsIgnoreCase(animalGroup)) {
                 animal.setGetsFed(true);
                 return true;
             }
@@ -185,10 +186,24 @@ public class Farm {
     }
 
     private void createNewAnimal() {
-        System.out.println("Tierart eingeben: (Schaf / Kuh / Huhn");
-        String animalType = sc.nextLine();
+
+        System.out.println("Tierart eingeben: (Schaf / Kuh / Huhn)");
+        String animalType = "";
+        boolean incorrectAnimalType = true;
+        while (incorrectAnimalType) {
+            animalType = sc.nextLine();
+            for (Animal animal : animals) {
+                if (animal.getAnimalType().get("sing").equalsIgnoreCase(animalType)) {
+                    incorrectAnimalType = false;
+                    break;
+                }
+            }
+            if(incorrectAnimalType){
+                System.out.println("Tierart nicht vorhanden. Bitte erneut eingeben!");
+            }
+        }
+
         String animalName;
-        int animalAge;
 
         while (true) {
             System.out.println("Namen des Tieres eingeben:");
@@ -202,13 +217,13 @@ public class Farm {
         }
 
         System.out.println("Alter des Tieres eingeben:");
-        animalAge = Integer.parseInt(sc.nextLine());
+        int animalAge = Integer.parseInt(sc.nextLine());
 
-        switch (animalType) {
-            case "Schaf" -> animals.add(new Sheep(animalName, 50, animalAge, 0));
-            case "Kuh" -> animals.add(new Cow(animalName, 50, animalAge, 0));
-            case "Huhn" -> animals.add(new Chicken(animalName, 50, animalAge, 0));
-            case "Schwein" -> animals.add(new Pig(animalName, 50, animalAge, 0));
+        switch (animalType.toLowerCase()) {
+            case "schaf" -> animals.add(new Sheep(animalName, 50, animalAge, 0));
+            case "kuh" -> animals.add(new Cow(animalName, 50, animalAge, 0));
+            case "huhn" -> animals.add(new Chicken(animalName, 50, animalAge, 0));
+            case "schwein" -> animals.add(new Pig(animalName, 50, animalAge, 0));
         }
     }
 
@@ -246,7 +261,7 @@ public class Farm {
         roundCounter++;
     }
 
-    private void resetAnimalGroup(){
+    private void resetAnimalGroup() {
         isAnimalGroup = false;
     }
 
