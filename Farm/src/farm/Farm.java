@@ -100,7 +100,7 @@ public class Farm {
         if (isAnimalGroup(userInput)) {
             hunger = 100;
             for (Animal animal : animals) {
-                if (animal.getHunger() < hunger) {
+                if ((userInput.equalsIgnoreCase("alle") || animal.getAnimalType().get("plur").equalsIgnoreCase(userInput)) && animal.getHunger() < hunger){
                     hunger = animal.getHunger();
                 }
             }
@@ -131,7 +131,7 @@ public class Farm {
             if (hunger <= 75) {
                 System.out.println("Eines oder mehrere Tiere sind noch nicht besonders hungrig. Sollen trotzdem alle gewählten Tiere gefüttert werden? (J/N)");
                 feedAnimalInput = sc.nextLine();
-                if (!feedAnimalInput.equalsIgnoreCase("j")) {
+                if (feedAnimalInput.equalsIgnoreCase("n")) {
                     animals.forEach(animal -> animal.setGetsFed(false));
                     return false;
                 }
@@ -166,14 +166,15 @@ public class Farm {
             return true;
         }
 
+        boolean animalGroupExisting = false;
         for (Animal animal : animals) {
             if (animal.getAnimalType().get("plur").equalsIgnoreCase(animalGroup)) {
                 animal.setGetsFed(true);
-                return true;
+                animalGroupExisting = true;
             }
         }
 
-        return false;
+        return animalGroupExisting;
     }
 
     private void increaseHunger() {
@@ -198,7 +199,7 @@ public class Farm {
                     break;
                 }
             }
-            if(incorrectAnimalType){
+            if (incorrectAnimalType) {
                 System.out.println("Tierart nicht vorhanden. Bitte erneut eingeben!");
             }
         }
