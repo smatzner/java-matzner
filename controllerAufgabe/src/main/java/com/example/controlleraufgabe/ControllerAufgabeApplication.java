@@ -10,11 +10,11 @@ import java.util.Set;
 
 @SpringBootApplication
 public class ControllerAufgabeApplication {
-    public Set<User> users = new HashSet<User>();
-    public Set<Article> articles = new HashSet<Article>();
+    public static Set<User> users = new HashSet<User>();
+    public static Set<Article> articles = new HashSet<Article>();
 
     public static void main(String[] args) {
-                SpringApplication.run(ControllerAufgabeApplication.class, args);
+        SpringApplication.run(ControllerAufgabeApplication.class, args);
     }
 
 }
