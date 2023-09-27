@@ -2,6 +2,7 @@ package com.example.controlleraufgabe.controller;
 
 import com.example.controlleraufgabe.ControllerAufgabeApplication;
 import com.example.controlleraufgabe.dto.ArticleDTO;
+import com.example.controlleraufgabe.dto.ArticlePriceDTO;
 import com.example.controlleraufgabe.entity.Article;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,5 +36,17 @@ public class ArticleController {
         return ControllerAufgabeApplication.articles.stream()
                 .filter(article -> article.getArticleId() == articleId)
                 .findFirst();
+    }
+
+    @PutMapping("{articleId}")
+    public Article updateArticlePrice(@PathVariable int articleId, @RequestBody ArticlePriceDTO articlePriceDTO) throws Exception {
+        for (Article article : ControllerAufgabeApplication.articles){
+            if(article.getArticleId() == articleId){
+                article.setArticlePrice(articlePriceDTO.getArticlePrice());
+                return article;
+            }
+        }
+
+        throw new Exception("Article mit " + articleId + " nicht gefunden.");
     }
 }
