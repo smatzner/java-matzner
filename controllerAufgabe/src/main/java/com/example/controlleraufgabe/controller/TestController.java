@@ -1,6 +1,5 @@
 package com.example.controlleraufgabe.controller;
 
-import lombok.*;
 import org.springframework.web.bind.annotation.*;
 
 
