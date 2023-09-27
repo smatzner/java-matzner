@@ -5,6 +5,7 @@ import com.example.controlleraufgabe.dto.ArticleDTO;
 import com.example.controlleraufgabe.entity.Article;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -27,5 +28,12 @@ public class ArticleController {
     @GetMapping
     public Set<Article> getArticle(){
         return ControllerAufgabeApplication.articles;
+    }
+
+    @GetMapping("{articleId}")
+    public Optional<Article> getArticleById(@PathVariable int articleId){
+        return ControllerAufgabeApplication.articles.stream()
+                .filter(article -> article.getArticleId() == articleId)
+                .findFirst();
     }
 }
