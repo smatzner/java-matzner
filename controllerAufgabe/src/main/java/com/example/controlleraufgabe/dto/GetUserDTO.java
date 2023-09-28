@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
-public class PrintUserDTO {
+public class GetUserDTO {
     private int userId;
     private String username;
     private int age;
