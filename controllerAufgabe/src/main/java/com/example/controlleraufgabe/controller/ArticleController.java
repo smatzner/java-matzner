@@ -4,6 +4,9 @@ import com.example.controlleraufgabe.ControllerAufgabeApplication;
 import com.example.controlleraufgabe.dto.ArticleDTO;
 import com.example.controlleraufgabe.dto.ArticlePriceDTO;
 import com.example.controlleraufgabe.entity.Article;
+import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -39,14 +42,14 @@ public class ArticleController {
     }
 
     @PutMapping("{articleId}")
-    public Article updateArticlePrice(@PathVariable int articleId, @RequestBody ArticlePriceDTO articlePriceDTO) throws Exception {
+    public ResponseEntity<?> updateArticlePrice(@PathVariable int articleId, @RequestBody ArticlePriceDTO articlePriceDTO) {
         for (Article article : ControllerAufgabeApplication.articles){
             if(article.getArticleId() == articleId){
                 article.setArticlePrice(articlePriceDTO.getArticlePrice());
-                return article;
+                return ResponseEntity.ok(article);
             }
         }
 
-        throw new Exception("Article mit " + articleId + " nicht gefunden.");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Artikel nicht gefunden");
     }
 }
