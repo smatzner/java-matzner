@@ -1,7 +1,7 @@
 package com.example.serviceaufgabe;
 
-import com.example.serviceaufgabe.entity.Article;
-import com.example.serviceaufgabe.entity.User;
+import com.example.serviceaufgabe.entities.Article;
+import com.example.serviceaufgabe.entities.User;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

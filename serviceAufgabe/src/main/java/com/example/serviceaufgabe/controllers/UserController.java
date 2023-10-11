@@ -1,9 +1,9 @@
-package com.example.serviceaufgabe.controller;
+package com.example.serviceaufgabe.controllers;
 
 import com.example.serviceaufgabe.ServiceAufgabeApplication;
 import com.example.serviceaufgabe.dto.GetUserDTO;
 import com.example.serviceaufgabe.dto.UserDTO;
-import com.example.serviceaufgabe.entity.User;
+import com.example.serviceaufgabe.entities.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;

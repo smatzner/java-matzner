@@ -1,4 +1,4 @@
-package com.example.serviceaufgabe.controller;
+package com.example.serviceaufgabe.controllers;
 
 import org.springframework.web.bind.annotation.*;
 

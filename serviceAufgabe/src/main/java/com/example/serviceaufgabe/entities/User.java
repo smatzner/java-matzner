@@ -1,4 +1,4 @@
-package com.example.serviceaufgabe.entity;
+package com.example.serviceaufgabe.entities;
 
 import lombok.*;
 
