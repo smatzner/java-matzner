@@ -4,48 +4,42 @@ import com.example.serviceaufgabe.ServiceAufgabeApplication;
 import com.example.serviceaufgabe.dto.GetUserDTO;
 import com.example.serviceaufgabe.dto.UserDTO;
 import com.example.serviceaufgabe.entities.User;
+import com.example.serviceaufgabe.services.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("api/user")
 public class UserController {
+    private final UserService userService;
 
     @PostMapping
-    public String registerUser(@RequestBody UserDTO userDTO) {
-        for (User user : ServiceAufgabeApplication.users) {
-            if (user.getUserId() == userDTO.getUserId()) {
-                return "User bereits vorhanden!";
-            }
-        }
-        User user = new User(
-                userDTO.getUserId(),
-                userDTO.getUsername(),
-                userDTO.getPassword(),
-                userDTO.getAge()
-        );
+    public ResponseEntity<String> registerUser(@RequestBody UserDTO userDTO) {
+        userService.registerUser(userDTO);
 
-        ServiceAufgabeApplication.users.add(user);
-        return "User erfolgreich angelegt";
+        return ResponseEntity.status(HttpStatus.CREATED).body("User erfolgreich angelegt");
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getUsers(){
+        Set<UserDTO> userDTOS = userService.getUsers();
+
+        return ResponseEntity.status(HttpStatus.OK).body(userDTOS);
     }
 
     @DeleteMapping("{userId}")
-    public List<GetUserDTO> deleteUser(@PathVariable int userId, @RequestBody UserDTO userDTO) {
-        ServiceAufgabeApplication.users.removeIf(user -> user.getUserId() == userId);
+    public ResponseEntity<?> deleteUser(@PathVariable int userId) {
+        List<GetUserDTO> registeredUsers = userService.deleteUser(userId);
 
-        List<GetUserDTO> registeredUsers = new ArrayList<>();
+        if(registeredUsers == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User nicht gefunden!");
 
-        ServiceAufgabeApplication.users.forEach(user -> {
-            GetUserDTO getUserDTO = new GetUserDTO(
-                    user.getUserId(),
-                    user.getUsername(),
-                    user.getAge()
-            );
-            registeredUsers.add(getUserDTO);
-        });
-
-        return registeredUsers;
+        return ResponseEntity.status(HttpStatus.OK).body(registeredUsers);
     }
 }
