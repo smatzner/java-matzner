@@ -1,4 +1,4 @@
-package com.example.serviceaufgabe.entities;
+package com.example.serviceaufgabe.dto;
 
 import lombok.*;
 
@@ -6,9 +6,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Purchase {
-    private int userId;
+public class PurchaseDTO {
     private int articleId;
     private int qty;
-    private double totalValue;
 }
