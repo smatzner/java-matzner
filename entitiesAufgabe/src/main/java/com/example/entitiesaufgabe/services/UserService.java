@@ -16,10 +16,10 @@ import java.util.*;
 public class UserService {
 
     @Autowired
-    UserRepository userCrudRepository;
+    UserRepository userRepository;
 
     public void registerUser(UserDTO userDTO) {
-        List<User> userList = userCrudRepository.findAll();
+        List<User> userList = userRepository.findAll();
         userList.forEach(user -> {
             if(user.getUsername().equalsIgnoreCase(userDTO.getUsername())){
                 throw new EntityExistsException("Der Username " + userDTO.getUsername() + " ist bereits vergeben! Bitte einen anderen Username wählen");
@@ -33,12 +33,12 @@ public class UserService {
                 .build();
 
 
-        userCrudRepository.save(user);
+        userRepository.save(user);
     }
 
     // TODO: Helper Löschen
     public Set<UserDTO> getUsers() {
-        List<User> userList = userCrudRepository.findAll();
+        List<User> userList = userRepository.findAll();
         Set<UserDTO> userDTOS = new HashSet<>();
 
         for(User user : userList){
@@ -54,13 +54,13 @@ public class UserService {
     }
 
     public List<GetUserDTO> deleteUser(int userId) {
-        if(userCrudRepository.findById(userId).isEmpty()){
+        if(userRepository.findById(userId).isEmpty()){
             throw new NoSuchElementException("Keinen User mit der Id " + userId + " gefunden!");
         }
 
-        userCrudRepository.deleteById(userId);
+        userRepository.deleteById(userId);
 
-        List<User> userList = userCrudRepository.findAll();
+        List<User> userList = userRepository.findAll();
         List<GetUserDTO> registeredUsers = new ArrayList<>();
         userList.forEach(user -> {
             GetUserDTO getUserDTO = new GetUserDTO(

@@ -1,31 +1,43 @@
 package com.example.entitiesaufgabe.services;
 
+import com.example.entitiesaufgabe.EntitiesAufgabeApplication;
 import com.example.entitiesaufgabe.dto.ArticleDTO;
 import com.example.entitiesaufgabe.dto.ArticlePriceDTO;
 import com.example.entitiesaufgabe.entities.Article;
-import com.example.entitiesaufgabe.entities.Article_Purchase;
+import com.example.entitiesaufgabe.repositories.ArticleRepository;
+import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import static com.example.entitiesaufgabe.EntitiesAufgabeApplication.articles;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
 public class ArticleService {
+
+    @Autowired
+    ArticleRepository articleRepository;
+
     public void saveArticle(ArticleDTO articleDTO) {
+        List<Article> articles = articleRepository.findAll();
+        articles.forEach(article -> {
+            if (article.getArticleName().equalsIgnoreCase(articleDTO.getArticleName())) {
+                throw new EntityExistsException("Der Artikel mit der Bezeichnung " + articleDTO.getArticleName() + " ist bereits in der Datenbank angelegt.");
+            }
+        });
+
         Article article = Article.builder()
                 .articleName(articleDTO.getArticleName())
                 .articlePrice(articleDTO.getArticlePrice())
                 .build();
 
 
-        articles.add(article);
+        articleRepository.save(article);
     }
 
     public Set<ArticleDTO> getArticles() {
+        List<Article> articles = articleRepository.findAll();
         Set<ArticleDTO> articleDTOS = new HashSet<>();
 
         for (Article article : articles) {
@@ -39,34 +51,34 @@ public class ArticleService {
     }
 
     public ArticleDTO getArticleById(int articleId) {
-        ArticleDTO articleDTO = new ArticleDTO();
-
-        for (Article article : articles) {
-            if (article.getArticleId() == articleId) {
-                articleDTO.setArticleName(article.getArticleName());
-                articleDTO.setArticlePrice(article.getArticlePrice());
-
-                return articleDTO;
-            }
+        if (articleRepository.findById(articleId).isEmpty()) {
+            throw new NoSuchElementException("Keinen Artikel mit der Id " + articleId + " gefunden!");
         }
 
-        return null;
+        Article article = articleRepository.findById(articleId).get();
+
+        ArticleDTO articleDTO = new ArticleDTO(
+                article.getArticleName(),
+                article.getArticlePrice()
+        );
+
+        return articleDTO;
     }
 
     public ArticleDTO updateArticlePrice(int articleId, ArticlePriceDTO articlePriceDTO) {
-        ArticleDTO articleDTO = new ArticleDTO();
-
-        for (Article article : articles) {
-            if (article.getArticleId() == articleId) {
-                article.setArticlePrice(articlePriceDTO.getArticlePrice());
-
-                articleDTO.setArticleName(article.getArticleName());
-                articleDTO.setArticlePrice(article.getArticlePrice());
-
-                return articleDTO;
-            }
+        if (articleRepository.findById(articleId).isEmpty()) {
+            throw new NoSuchElementException("Kein Artikel mit der Id " + articleId + " gefunden!");
         }
 
-        return null;
+        Article article = articleRepository.findById(articleId).get();
+        article.setArticlePrice(articlePriceDTO.getArticlePrice());
+        articleRepository.save(article);
+
+        ArticleDTO articleDTO = new ArticleDTO(
+                article.getArticleName(),
+                article.getArticlePrice()
+        );
+
+        return articleDTO;
     }
 }
