@@ -6,12 +6,15 @@ import com.example.entitiesaufgabe.dto.PurchaseDTO;
 import com.example.entitiesaufgabe.dto.UserDTO;
 import com.example.entitiesaufgabe.services.PurchaseService;
 import com.example.entitiesaufgabe.services.UserService;
+import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 @RequiredArgsConstructor
@@ -23,13 +26,18 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<String> registerUser(@RequestBody UserDTO userDTO) {
-        userService.registerUser(userDTO);
+
+        try {
+            userService.registerUser(userDTO);
+        } catch (EntityExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body("User erfolgreich angelegt");
     }
 
     @GetMapping
-    public ResponseEntity<?> getUsers(){
+    public ResponseEntity<?> getUsers() {
         Set<UserDTO> userDTOS = userService.getUsers();
 
         return ResponseEntity.status(HttpStatus.OK).body(userDTOS);
@@ -37,9 +45,13 @@ public class UserController {
 
     @DeleteMapping("{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable int userId) {
-        List<GetUserDTO> registeredUsers = userService.deleteUser(userId);
+        List<GetUserDTO> registeredUsers;
 
-        if(registeredUsers == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User nicht gefunden!");
+        try {
+            registeredUsers = userService.deleteUser(userId);
+        } catch (NoSuchElementException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
 
         return ResponseEntity.status(HttpStatus.OK).body(registeredUsers);
     }
