@@ -17,54 +17,46 @@ import static com.example.entitiesaufgabe.EntitiesAufgabeApplication.*;
 @RequiredArgsConstructor
 @Service
 public class PurchaseService {
+
+
     public List<UserPurchasesDTO> addPurchase(int userId, PurchaseDTO purchaseDTO) {
         List<UserPurchasesDTO> userPurchases = new ArrayList<>();
 
-        User purchasingUser = createNewPurchasingUser(userId);
+        User customer = createCustomer(userId);
 
-        Purchase newPurchase = createNewPurchase(purchaseDTO, purchasingUser);
-
-        purchases.put(purchasingUser, newPurchase);
-
-        purchases.forEach((user, purchase) -> {
-            if (user.getUserId() == purchasingUser.getUserId()) {
-                userPurchases.add(new UserPurchasesDTO(
-                        purchase.getUserId(),
-                        purchase.getArticleId(),
-                        purchase.getQty(),
-                        purchase.getTotalValue()
-                ));
-            }
-        });
+        // TODO: impl Repo
 
         return userPurchases;
     }
 
-    private Purchase createNewPurchase(PurchaseDTO purchaseDTO, User purchasingUser) {
-        Optional<Article> purchasedArticle = articles.stream().filter(article -> article.getArticleId() == purchaseDTO.getArticleId()).findFirst();
+    private User createCustomer(int userId){
+        Optional<User> userOptional = users.stream().filter(user -> user.getUserId() == userId).findFirst();
 
-        double totalValue = purchasedArticle.get().getArticlePrice() * purchaseDTO.getQty();
+        // TODO: impl Exception
+        if(userOptional.isEmpty()) return null;
 
-        Purchase newPurchase = new Purchase(
-                purchasingUser.getUserId(),
-                purchaseDTO.getArticleId(),
-                purchaseDTO.getQty(),
-                totalValue
-        );
-        return newPurchase;
+        User user = userOptional.get();
+
+        User customer = User.builder()
+                .userId(user.getUserId())
+                .username(user.getUsername())
+                .build();
+
+
+        return customer;
     }
 
-    private User createNewPurchasingUser(int userId){
-        Optional<User> purchasingUser = users.stream().filter(user -> user.getUserId() == userId).findFirst();
+//    private Purchase createNewPurchase(PurchaseDTO purchaseDTO, User purchasingUser) {
+//        Optional<Article> purchasedArticle = articles.stream().filter(article -> article.getArticleId() == purchaseDTO.getArticleId()).findFirst();
+//
+//        double totalValue = purchasedArticle.get().getArticlePrice() * purchaseDTO.getQty();
+//
+//        Purchase newPurchase = new Purchase(
+//                purchaseDTO.getArticleId(),
+//                purchaseDTO.getQty(),
+//                totalValue
+//        );
+//        return newPurchase;
+//    }
 
-        if(purchasingUser.isEmpty()) return null;
-
-        User purchasingUserClone = new User(
-                purchasingUser.get().getUserId(),
-                purchasingUser.get().getUsername(),
-                purchasingUser.get().getPassword(),
-                purchasingUser.get().getAge());
-
-        return purchasingUserClone;
-    }
 }

@@ -8,7 +8,6 @@ import lombok.*;
 @Getter
 @Setter
 public class ArticleDTO {
-    private int articleId;
     private String articleName;
     private double articlePrice;
 }

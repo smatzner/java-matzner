@@ -16,19 +16,18 @@ import static com.example.entitiesaufgabe.EntitiesAufgabeApplication.users;
 @RequiredArgsConstructor
 @Service
 public class UserService {
-    public void registerUser(UserDTO userDTO){
-        User user = new User(
-                userDTO.getUserId(),
-                userDTO.getUsername(),
-                userDTO.getPassword(),
-                userDTO.getAge()
-        );
+    public void registerUser(UserDTO userDTO) {
+        User user = User.builder()
+                .username(userDTO.getUsername())
+                .password(userDTO.getPassword())
+                .age(userDTO.getAge())
+                .build();
 
         users.add(user);
     }
 
     // TODO: Helper Löschen
-    public Set<UserDTO> getUsers(){
+    public Set<UserDTO> getUsers() {
         Set<UserDTO> userDTOS = new HashSet<>();
         for (User user : users) {
             userDTOS.add(new UserDTO(
@@ -42,8 +41,8 @@ public class UserService {
         return userDTOS;
     }
 
-    public List<GetUserDTO> deleteUser(int userId){
-        if(users.removeIf(user -> user.getUserId() == userId)){
+    public List<GetUserDTO> deleteUser(int userId) {
+        if (users.removeIf(user -> user.getUserId() == userId)) {
             List<GetUserDTO> registeredUsers = new ArrayList<>();
 
             users.forEach(user -> {

@@ -20,4 +20,5 @@ public class EntitiesAufgabeApplication {
     public static void main(String[] args) {
         SpringApplication.run(EntitiesAufgabeApplication.class, args);
     }
+
 }
