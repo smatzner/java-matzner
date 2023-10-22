@@ -9,8 +9,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class UserPurchasesDTO {
+public class ResponsePurchaseDTO {
     private int userId;
+    private int purchaseId;
     private int articleId;
     private int qty;
     private double totalValue;

@@ -2,11 +2,9 @@ package com.example.entitiesaufgabe.entities;
 
 import com.example.entitiesaufgabe.entities.keys.Article_Purchase_PK;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -25,4 +23,9 @@ public class Article_Purchase {
     private Purchase purchase;
 
     private int qty;
+
+    @Transient
+    public double totalValue(){
+        return qty * article.getArticlePrice();
+    }
 }

@@ -7,6 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 public class PurchaseDTO {
+    private int userId;
     private int articleId;
     private int qty;
 }

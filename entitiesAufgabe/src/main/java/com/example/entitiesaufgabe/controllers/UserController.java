@@ -1,16 +1,12 @@
 package com.example.entitiesaufgabe.controllers;
 
-import com.example.entitiesaufgabe.dto.UserPurchasesDTO;
 import com.example.entitiesaufgabe.dto.GetUserDTO;
-import com.example.entitiesaufgabe.dto.PurchaseDTO;
 import com.example.entitiesaufgabe.dto.UserDTO;
-import com.example.entitiesaufgabe.services.PurchaseService;
 import com.example.entitiesaufgabe.services.UserService;
 import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

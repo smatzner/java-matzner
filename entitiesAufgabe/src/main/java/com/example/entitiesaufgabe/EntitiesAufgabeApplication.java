@@ -13,10 +13,6 @@ import java.util.Set;
 
 @SpringBootApplication
 public class EntitiesAufgabeApplication {
-    public static Set<User> users = new HashSet<User>();
-    public static Set<Article> articles = new HashSet<Article>();
-    public static Map<User, Purchase> purchases = new HashMap<>();
-
     public static void main(String[] args) {
         SpringApplication.run(EntitiesAufgabeApplication.class, args);
     }
