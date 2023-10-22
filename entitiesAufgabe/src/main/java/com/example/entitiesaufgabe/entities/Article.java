@@ -15,14 +15,16 @@ public class Article {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int articleId;
+    private int id;
 
-    @Column(name = "title", nullable = false)
-    private String articleName;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
-    @Column(name = "price")
-    private double articlePrice;
+    @Column(nullable = false)
+    private String title;
+
+    private double price;
 
     @OneToMany(mappedBy = "article")
     private List<Article_Purchase> articlePurchaseList;

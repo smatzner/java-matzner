@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -64,42 +63,12 @@ public class PurchaseService {
         articlePurchaseRepository.save(articlePurchase);
 
         return new ResponsePurchaseDTO(
-                user.getUserId(),
-                purchase.getPurchaseId(),
-                article.getArticleId(),
+                user.getId(),
+                purchase.getId(),
+                article.getId(),
                 articlePurchase.getQty(),
                 articlePurchase.totalValue()
         );
     }
-
-//    private User createCustomer(int userId) {
-//        Optional<User> userOptional = users.stream().filter(user -> user.getUserId() == userId).findFirst();
-//
-//        // TODO: impl Exception
-//        if (userOptional.isEmpty()) return null;
-//
-//        User user = userOptional.get();
-//
-//        User customer = User.builder()
-//                .userId(user.getUserId())
-//                .username(user.getUsername())
-//                .build();
-//
-//
-//        return customer;
-//    }
-
-//    private Purchase createNewPurchase(PurchaseDTO purchaseDTO, User purchasingUser) {
-//        Optional<Article> purchasedArticle = articles.stream().filter(article -> article.getArticleId() == purchaseDTO.getArticleId()).findFirst();
-//
-//        double totalValue = purchasedArticle.get().getArticlePrice() * purchaseDTO.getQty();
-//
-//        Purchase newPurchase = new Purchase(
-//                purchaseDTO.getArticleId(),
-//                purchaseDTO.getQty(),
-//                totalValue
-//        );
-//        return newPurchase;
-//    }
 
 }

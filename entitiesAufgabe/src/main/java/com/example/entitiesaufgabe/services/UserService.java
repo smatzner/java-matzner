@@ -36,23 +36,6 @@ public class UserService {
         userRepository.save(user);
     }
 
-    // TODO: Helper Löschen
-    public Set<UserDTO> getUsers() {
-        List<User> userList = userRepository.findAll();
-        Set<UserDTO> userDTOS = new HashSet<>();
-
-        for(User user : userList){
-            userDTOS.add(new UserDTO(
-                    user.getUserId(),
-                    user.getUsername(),
-                    user.getPassword(),
-                    user.getAge()
-            ));
-        }
-
-        return userDTOS;
-    }
-
     public List<GetUserDTO> deleteUser(int userId) {
         if(userRepository.findById(userId).isEmpty()){
             throw new NoSuchElementException("Keinen User mit der Id " + userId + " gefunden!");
@@ -64,7 +47,7 @@ public class UserService {
         List<GetUserDTO> registeredUsers = new ArrayList<>();
         userList.forEach(user -> {
             GetUserDTO getUserDTO = new GetUserDTO(
-                    user.getUserId(),
+                    user.getId(),
                     user.getUsername(),
                     user.getAge()
             );

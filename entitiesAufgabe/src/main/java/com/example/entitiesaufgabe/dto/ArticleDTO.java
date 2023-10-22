@@ -1,5 +1,6 @@
 package com.example.entitiesaufgabe.dto;
 
+import com.example.entitiesaufgabe.entities.Category;
 import lombok.*;
 
 @Builder
@@ -8,6 +9,7 @@ import lombok.*;
 @Getter
 @Setter
 public class ArticleDTO {
-    private String articleName;
-    private double articlePrice;
+    private String title;
+    private Category category;
+    private double price;
 }

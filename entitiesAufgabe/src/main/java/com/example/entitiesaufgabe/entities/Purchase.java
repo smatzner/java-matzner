@@ -15,8 +15,7 @@ public class Purchase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int purchaseId;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "userId")

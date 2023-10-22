@@ -26,6 +26,6 @@ public class Article_Purchase {
 
     @Transient
     public double totalValue(){
-        return qty * article.getArticlePrice();
+        return qty * article.getPrice();
     }
 }

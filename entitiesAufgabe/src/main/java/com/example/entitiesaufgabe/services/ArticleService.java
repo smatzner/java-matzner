@@ -1,6 +1,5 @@
 package com.example.entitiesaufgabe.services;
 
-import com.example.entitiesaufgabe.EntitiesAufgabeApplication;
 import com.example.entitiesaufgabe.dto.ArticleDTO;
 import com.example.entitiesaufgabe.dto.ArticlePriceDTO;
 import com.example.entitiesaufgabe.entities.Article;
@@ -22,14 +21,15 @@ public class ArticleService {
     public void saveArticle(ArticleDTO articleDTO) {
         List<Article> articles = articleRepository.findAll();
         articles.forEach(article -> {
-            if (article.getArticleName().equalsIgnoreCase(articleDTO.getArticleName())) {
-                throw new EntityExistsException("Der Artikel mit der Bezeichnung " + articleDTO.getArticleName() + " ist bereits in der Datenbank angelegt.");
+            if (article.getTitle().equalsIgnoreCase(articleDTO.getTitle())) {
+                throw new EntityExistsException("Der Artikel mit der Bezeichnung " + articleDTO.getTitle() + " ist bereits in der Datenbank angelegt.");
             }
         });
 
         Article article = Article.builder()
-                .articleName(articleDTO.getArticleName())
-                .articlePrice(articleDTO.getArticlePrice())
+                .title(articleDTO.getTitle())
+                .category(articleDTO.getCategory())
+                .price(articleDTO.getPrice())
                 .build();
 
 
@@ -42,8 +42,9 @@ public class ArticleService {
 
         for (Article article : articles) {
             articleDTOS.add(new ArticleDTO(
-                    article.getArticleName(),
-                    article.getArticlePrice()
+                    article.getTitle(),
+                    article.getCategory(),
+                    article.getPrice()
             ));
         }
 
@@ -57,12 +58,11 @@ public class ArticleService {
 
         Article article = articleRepository.findById(articleId).get();
 
-        ArticleDTO articleDTO = new ArticleDTO(
-                article.getArticleName(),
-                article.getArticlePrice()
+        return new ArticleDTO(
+                article.getTitle(),
+                article.getCategory(),
+                article.getPrice()
         );
-
-        return articleDTO;
     }
 
     public ArticleDTO updateArticlePrice(int articleId, ArticlePriceDTO articlePriceDTO) {
@@ -71,12 +71,13 @@ public class ArticleService {
         }
 
         Article article = articleRepository.findById(articleId).get();
-        article.setArticlePrice(articlePriceDTO.getArticlePrice());
+        article.setPrice(articlePriceDTO.getPrice());
         articleRepository.save(article);
 
         ArticleDTO articleDTO = new ArticleDTO(
-                article.getArticleName(),
-                article.getArticlePrice()
+                article.getTitle(),
+                article.getCategory(),
+                article.getPrice()
         );
 
         return articleDTO;

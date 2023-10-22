@@ -8,5 +8,5 @@ import lombok.*;
 @Getter
 @Setter
 public class ArticlePriceDTO {
-    private double articlePrice;
+    private double price;
 }
