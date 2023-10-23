@@ -18,7 +18,6 @@ import java.util.Set;
 @RequestMapping("api/user")
 public class UserController {
     private final UserService userService;
-//    private final PurchaseService purchaseService;
 
     @PostMapping
     public ResponseEntity<String> registerUser(@RequestBody UserDTO userDTO) {
@@ -30,13 +29,6 @@ public class UserController {
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).body("User erfolgreich angelegt");
-    }
-
-    @GetMapping
-    public ResponseEntity<?> getUsers() {
-        Set<UserDTO> userDTOS = userService.getUsers();
-
-        return ResponseEntity.status(HttpStatus.OK).body(userDTOS);
     }
 
     @DeleteMapping("{userId}")
@@ -51,13 +43,4 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK).body(registeredUsers);
     }
-
-//    @PostMapping("{userId}/purchase")
-//    public ResponseEntity<?> addPurchase(@PathVariable int userId, @RequestBody PurchaseDTO purchaseDTO){
-//        List<UserPurchasesDTO> userPurchases = purchaseService.addPurchase(userId,purchaseDTO);
-//
-//        if(userPurchases == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User oder Artikel nicht gefunden");
-//
-//        return ResponseEntity.status(HttpStatus.OK).body(userPurchases);
-//    }
 }
