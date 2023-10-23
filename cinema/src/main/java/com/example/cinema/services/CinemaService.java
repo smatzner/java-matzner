@@ -1,16 +1,18 @@
 package com.example.cinema.services;
 
+import com.example.cinema.CinemaApplication;
 import com.example.cinema.dtos.CinemaDTO;
 import com.example.cinema.dtos.ResponseCinemaDTO;
 import com.example.cinema.entities.Cinema;
 import com.example.cinema.repositories.CinemaRepository;
 import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.Entity;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
@@ -38,6 +40,40 @@ public class CinemaService {
                 .build();
 
         cinemaRepository.save(cinema);
+
+        return new ResponseCinemaDTO(
+                cinema.getId(),
+                cinema.getName(),
+                cinema.getAddress(),
+                cinema.getManager(),
+                cinema.getMaxHalls()
+        );
+    }
+
+    public Set<ResponseCinemaDTO> getCinemas() {
+
+        List<Cinema> cinemas = cinemaRepository.findAll();
+        Set<ResponseCinemaDTO> responseCinemaDTOS = new HashSet<>();
+
+        cinemas.forEach(cinema -> {
+            responseCinemaDTOS.add(new ResponseCinemaDTO(
+                    cinema.getId(),
+                    cinema.getName(),
+                    cinema.getAddress(),
+                    cinema.getManager(),
+                    cinema.getMaxHalls()
+            ));
+        });
+
+        return responseCinemaDTOS;
+    }
+
+    public ResponseCinemaDTO getCinemaById(int cinemaId){
+        if(cinemaRepository.findById(cinemaId).isEmpty()){
+            throw new NoSuchElementException("Kein Kino mit der ID " + cinemaId + " gefunden!");
+        }
+
+        Cinema cinema = cinemaRepository.findById(cinemaId).get();
 
         return new ResponseCinemaDTO(
                 cinema.getId(),

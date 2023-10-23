@@ -2,15 +2,18 @@ package com.example.cinema.controllers;
 
 import com.example.cinema.dtos.CinemaDTO;
 import com.example.cinema.dtos.ResponseCinemaDTO;
+import com.example.cinema.entities.Cinema;
 import com.example.cinema.services.CinemaService;
 import jakarta.persistence.EntityExistsException;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @RestController
@@ -25,6 +28,22 @@ public class CinemaController {
             return ResponseEntity.status(HttpStatus.CREATED).body(responseCinemaDTO);
         } catch (EntityExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getCinemas() {
+        Set<ResponseCinemaDTO> responseCinemaDTOS = cinemaService.getCinemas();
+        return ResponseEntity.status(HttpStatus.OK).body(responseCinemaDTOS);
+    }
+
+    @GetMapping("{cinemaId}")
+    public ResponseEntity<?> getCinemaById(@PathVariable int cinemaId){
+        try{
+            ResponseCinemaDTO responseCinemaDTO = cinemaService.getCinemaById(cinemaId);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCinemaDTO);
+        } catch (NoSuchElementException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }
