@@ -51,7 +51,7 @@ public class CinemaService {
     }
 
     public Set<ResponseCinemaDTO> getCinemas() {
-
+        // TODO: Saele anzeigeen
         List<Cinema> cinemas = cinemaRepository.findAll();
         Set<ResponseCinemaDTO> responseCinemaDTOS = new HashSet<>();
 
@@ -69,6 +69,7 @@ public class CinemaService {
     }
 
     public ResponseCinemaDTO getCinemaById(int cinemaId){
+        // TODO: Saele anzeigen
         if(cinemaRepository.findById(cinemaId).isEmpty()){
             throw new NoSuchElementException("Kein Kino mit der ID " + cinemaId + " gefunden!");
         }
@@ -82,5 +83,16 @@ public class CinemaService {
                 cinema.getManager(),
                 cinema.getMaxHalls()
         );
+    }
+
+    public void deleteCinema(int cinemaId) {
+        //TODO: Kino nur löschen, wenn keine Filme zugeordnet sind
+        if(cinemaRepository.findById(cinemaId).isEmpty()){
+            throw new NoSuchElementException("Kein Kino mit der ID " + cinemaId + " gefunden!");
+        }
+
+        Cinema cinema = cinemaRepository.findById(cinemaId).get();
+
+        cinemaRepository.delete(cinema);
     }
 }
