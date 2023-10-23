@@ -10,7 +10,6 @@ import lombok.*;
 @Setter
 @Entity(name = "cinemas")
 public class Cinema {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

@@ -2,16 +2,13 @@ package com.example.cinema.controllers;
 
 import com.example.cinema.dtos.CinemaDTO;
 import com.example.cinema.dtos.ResponseCinemaDTO;
-import com.example.cinema.entities.Cinema;
 import com.example.cinema.services.CinemaService;
 import jakarta.persistence.EntityExistsException;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
