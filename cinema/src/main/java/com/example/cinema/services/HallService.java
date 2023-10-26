@@ -2,6 +2,7 @@ package com.example.cinema.services;
 
 import com.example.cinema.dtos.HallDTO;
 import com.example.cinema.dtos.ResponseHallDTO;
+import com.example.cinema.dtos.UpdateHallDTO;
 import com.example.cinema.entities.Cinema;
 import com.example.cinema.entities.Hall;
 import com.example.cinema.exceptions.CinemaNotFoundException;
@@ -63,6 +64,29 @@ public class HallService {
                 hall.getCapacity(),
                 hall.getOccupiedSeats(),
                 hall.getSupportedMovieVersion()
+        );
+    }
+
+    public ResponseHallDTO updateHall(int hallId, UpdateHallDTO updateHallDTO){
+        if(hallRepository.findById(hallId).isEmpty()){
+            throw new NoSuchElementException("Kein Saal mit der ID " + hallId + " gefunden!");
+        }
+
+        Hall hall = hallRepository.findById(hallId).get();
+
+        hall.setCapacity(updateHallDTO.getCapacity());
+        hall.setOccupiedSeats(updateHallDTO.getOccupiedSeats());
+        hall.setSupportedMovieVersion(updateHallDTO.getSupportedMovieVersion());
+
+        //TODO: ändern nicht möglich wenn Filme zugeordnet sind
+        hallRepository.save(hall);
+
+        return new ResponseHallDTO(
+                hall.getId(),
+                hall.getCinema().getId(),
+                hall.getCapacity(),
+                hall.getOccupiedSeats(),
+                hall.getSupportedMovieVersion() //TODO: darf nur von 5D auf 3D geändert werden
         );
     }
 
