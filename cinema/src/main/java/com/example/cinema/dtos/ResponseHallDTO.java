@@ -9,6 +9,7 @@ import lombok.*;
 @Setter
 public class ResponseHallDTO {
     private int id;
+    private int cinemaId;
     private int capacity;
     private int occupiedSeats;
     private String supportedMovieVersion;

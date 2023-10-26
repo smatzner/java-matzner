@@ -4,7 +4,9 @@ import com.example.cinema.CinemaApplication;
 import com.example.cinema.dtos.CinemaDTO;
 import com.example.cinema.dtos.ResponseCinemaDTO;
 import com.example.cinema.entities.Cinema;
+import com.example.cinema.entities.Hall;
 import com.example.cinema.repositories.CinemaRepository;
+import com.example.cinema.repositories.HallRepository;
 import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import java.util.Set;
 public class CinemaService {
 
     private final CinemaRepository cinemaRepository;
+    private final HallRepository hallRepository;
 
     public ResponseCinemaDTO createCinema(CinemaDTO cinemaDTO){
 
@@ -91,8 +94,19 @@ public class CinemaService {
             throw new NoSuchElementException("Kein Kino mit der ID " + cinemaId + " gefunden!");
         }
 
+        deleteCinemaHalls(cinemaId);
+
         Cinema cinema = cinemaRepository.findById(cinemaId).get();
 
         cinemaRepository.delete(cinema);
+    }
+
+    private void deleteCinemaHalls(int cinemaId) {
+        List<Hall> hallList = hallRepository.findAll();
+        hallList.forEach(hall -> {
+            if(hall.getCinema().getId() == cinemaId){
+                hallRepository.delete(hall);
+            }
+        });
     }
 }
