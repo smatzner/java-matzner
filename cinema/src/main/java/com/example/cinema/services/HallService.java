@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -43,6 +44,22 @@ public class HallService {
         return new ResponseHallDTO(
                 hall.getId(),
                 cinema.getId(),
+                hall.getCapacity(),
+                hall.getOccupiedSeats(),
+                hall.getSupportedMovieVersion()
+        );
+    }
+
+    public ResponseHallDTO getHallById(int hallId){
+        if(hallRepository.findById(hallId).isEmpty()){
+            throw new NoSuchElementException("Kein Saal mit der ID " + hallId + " gefunden!");
+        }
+
+        Hall hall = hallRepository.findById(hallId).get();
+
+        return new ResponseHallDTO(
+                hall.getId(),
+                hall.getCinema().getId(),
                 hall.getCapacity(),
                 hall.getOccupiedSeats(),
                 hall.getSupportedMovieVersion()

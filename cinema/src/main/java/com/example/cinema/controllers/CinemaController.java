@@ -2,6 +2,7 @@ package com.example.cinema.controllers;
 
 import com.example.cinema.dtos.CinemaDTO;
 import com.example.cinema.dtos.ResponseCinemaDTO;
+import com.example.cinema.dtos.ResponseCinemaWithHallsDTO;
 import com.example.cinema.services.CinemaService;
 import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class CinemaController {
         }
     }
 
+    //TODO: löschen
     @GetMapping
     public ResponseEntity<?> getCinemas() {
         Set<ResponseCinemaDTO> responseCinemaDTOS = cinemaService.getCinemas();
@@ -35,21 +37,21 @@ public class CinemaController {
     }
 
     @GetMapping("{cinemaId}")
-    public ResponseEntity<?> getCinemaById(@PathVariable int cinemaId){
-        try{
-            ResponseCinemaDTO responseCinemaDTO = cinemaService.getCinemaById(cinemaId);
-            return ResponseEntity.status(HttpStatus.OK).body(responseCinemaDTO);
-        } catch (NoSuchElementException e){
+    public ResponseEntity<?> getCinemaById(@PathVariable int cinemaId) {
+        try {
+            ResponseCinemaWithHallsDTO responseCinemaWithHallsDTO = cinemaService.getCinemaById(cinemaId);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCinemaWithHallsDTO);
+        } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
     @DeleteMapping("{cinemaId}")
-    public ResponseEntity<?> deleteCinema(@PathVariable int cinemaId){
-        try{
+    public ResponseEntity<?> deleteCinema(@PathVariable int cinemaId) {
+        try {
             cinemaService.deleteCinema(cinemaId);
             return ResponseEntity.status(HttpStatus.OK).body("Kino gelöscht");
-        } catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }

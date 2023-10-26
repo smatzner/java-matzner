@@ -8,10 +8,9 @@ import com.example.cinema.services.HallService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,8 +28,16 @@ public class HallController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (MaxHallCapacityReachedException e) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body("I am a teapot");
+        }
+    }
+
+    @GetMapping("{hallId}")
+    public ResponseEntity<?> getHallById(@PathVariable int hallId) {
+        try {
+            ResponseHallDTO responseHallDTO = hallService.getHallById(hallId);
+            return ResponseEntity.status(HttpStatus.OK).body(responseHallDTO);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }
