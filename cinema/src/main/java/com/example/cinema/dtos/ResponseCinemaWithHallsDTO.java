@@ -2,6 +2,8 @@ package com.example.cinema.dtos;
 
 import lombok.*;
 
+import java.util.List;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,5 +15,6 @@ public class ResponseCinemaDTO {
     private String address;
     private String manager;
     private int maxHalls;
+    private List<ResponseHallDTO> cinemaHalls;
 }
 
