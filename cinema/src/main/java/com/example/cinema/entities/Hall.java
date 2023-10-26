@@ -3,6 +3,8 @@ package com.example.cinema.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,4 +25,7 @@ public class Hall {
     private int occupiedSeats;
 
     private String supportedMovieVersion;
+
+    @OneToMany(mappedBy = "hall")
+    private List<Movie> movies;
 }

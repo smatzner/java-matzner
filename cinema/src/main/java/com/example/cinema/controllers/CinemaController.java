@@ -19,7 +19,7 @@ import java.util.Set;
 public class CinemaController {
     private final CinemaService cinemaService;
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<?> createCinema(@RequestBody CinemaDTO cinemaDTO) {
         try {
             ResponseCinemaDTO responseCinemaDTO = cinemaService.createCinema(cinemaDTO);
