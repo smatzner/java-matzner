@@ -1,5 +1,6 @@
 package com.example.cinema.dtos;
 
+import com.example.cinema.entities.MovieVersion;
 import lombok.*;
 
 import java.util.Date;
@@ -16,5 +17,5 @@ public class ResponseMovieDTO {
     private String mainCharacter;
     private String description;
     private Date premieredAt;
-    private String movieVersion;
+    private MovieVersion movieVersion;
 }

@@ -24,7 +24,9 @@ public class Hall {
 
     private int occupiedSeats;
 
-    private String supportedMovieVersion;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private MovieVersion supportedMovieVersion;
 
     @OneToMany(mappedBy = "hall")
     private List<Movie> movies;

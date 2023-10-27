@@ -1,5 +1,6 @@
 package com.example.cinema.dtos;
 
+import com.example.cinema.entities.MovieVersion;
 import lombok.*;
 
 import java.util.Date;

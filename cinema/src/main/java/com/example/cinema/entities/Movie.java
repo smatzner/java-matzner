@@ -31,5 +31,7 @@ public class Movie {
     @Temporal(TemporalType.DATE)
     private Date premieredAt;
 
-    private String movieVersion;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private MovieVersion movieVersion;
 }

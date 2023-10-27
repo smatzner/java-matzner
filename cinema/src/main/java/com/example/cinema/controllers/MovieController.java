@@ -2,8 +2,7 @@ package com.example.cinema.controllers;
 
 import com.example.cinema.dtos.MovieDTO;
 import com.example.cinema.dtos.ResponseMovieDTO;
-import com.example.cinema.dtos.UpdateHallDTO;
-import com.example.cinema.dtos.UpdateMovieDTO;
+import com.example.cinema.exceptions.IllegalMovieVersionException;
 import com.example.cinema.exceptions.MovieVersionNotSupportedException;
 import com.example.cinema.services.MovieService;
 import lombok.RequiredArgsConstructor;
@@ -27,18 +26,20 @@ public class MovieController {
             return ResponseEntity.status(HttpStatus.CREATED).body(responseMovieDTO);
         } catch (NoSuchElementException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (MovieVersionNotSupportedException e){
+        } catch (MovieVersionNotSupportedException | IllegalMovieVersionException e){
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
         }
     }
 
     @PutMapping("{movieId}")
-    public ResponseEntity<?> updateMovie(@PathVariable int movieId, @RequestBody UpdateMovieDTO updateMovieDTO){
+    public ResponseEntity<?> updateMovie(@PathVariable int movieId, @RequestBody MovieDTO movieDTO){
         try{
-            ResponseMovieDTO responseMovieDTO = movieService.updateMovie(movieId,updateMovieDTO);
+            ResponseMovieDTO responseMovieDTO = movieService.updateMovie(movieId,movieDTO);
             return ResponseEntity.status(HttpStatus.OK).body(responseMovieDTO);
         } catch (NoSuchElementException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (MovieVersionNotSupportedException | IllegalMovieVersionException e){
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
         }
     }
 }

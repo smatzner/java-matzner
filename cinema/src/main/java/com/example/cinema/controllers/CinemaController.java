@@ -53,6 +53,8 @@ public class CinemaController {
             return ResponseEntity.status(HttpStatus.OK).body("Kino gelöscht");
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }
 }

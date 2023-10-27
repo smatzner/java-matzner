@@ -6,10 +6,13 @@ import com.example.cinema.dtos.ResponseCinemaWithHallsDTO;
 import com.example.cinema.dtos.ResponseHallDTO;
 import com.example.cinema.entities.Cinema;
 import com.example.cinema.entities.Hall;
+import com.example.cinema.entities.Movie;
 import com.example.cinema.repositories.CinemaRepository;
 import com.example.cinema.repositories.HallRepository;
+import com.example.cinema.repositories.MovieRepository;
 import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.sql.exec.ExecutionException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -20,6 +23,7 @@ public class CinemaService {
 
     private final CinemaRepository cinemaRepository;
     private final HallRepository hallRepository;
+    private final MovieRepository movieRepository;
 
     public ResponseCinemaDTO createCinema(CinemaDTO cinemaDTO){
 
@@ -102,14 +106,6 @@ public class CinemaService {
         cinemaRepository.delete(cinema);
     }
 
-    private void deleteCinemaHalls(int cinemaId) {
-        List<Hall> hallList = hallRepository.findAll();
-        hallList.forEach(hall -> {
-            if(hall.getCinema().getId() == cinemaId){
-                hallRepository.delete(hall);
-            }
-        });
-    }
 
 
     private List<ResponseHallDTO> getCinemaHalls(int cinemaId) {
@@ -127,5 +123,24 @@ public class CinemaService {
             }
         });
         return responseHallDTOS;
+    }
+
+    private void deleteCinemaHalls(int cinemaId) {
+        List<Hall> hallList = hallRepository.findAll();
+        List<Movie> movieList = movieRepository.findAll();
+
+        hallList.forEach(hall -> {
+            if (hall.getCinema().getId() == cinemaId){
+                if (movieList.stream().anyMatch(movie -> movie.getHall().getId() == hall.getId())){
+                    throw new IllegalArgumentException("Kino kann nicht gelöscht werden: Dem Saal " + hall.getId() + " ist noch ein Film zugeordnet.");
+                }
+            }
+        });
+
+        hallList.forEach(hall -> {
+            if(hall.getCinema().getId() == cinemaId){
+                hallRepository.delete(hall);
+            }
+        });
     }
 }

@@ -1,5 +1,6 @@
 package com.example.cinema.dtos;
 
+import com.example.cinema.entities.MovieVersion;
 import lombok.*;
 
 @Builder
@@ -12,5 +13,5 @@ public class ResponseHallDTO {
     private int cinemaId;
     private int capacity;
     private int occupiedSeats;
-    private String supportedMovieVersion;
+    private MovieVersion supportedMovieVersion;
 }

@@ -5,16 +5,18 @@ import com.example.cinema.dtos.ResponseHallDTO;
 import com.example.cinema.dtos.UpdateHallDTO;
 import com.example.cinema.entities.Cinema;
 import com.example.cinema.entities.Hall;
+import com.example.cinema.entities.MovieVersion;
 import com.example.cinema.exceptions.CinemaNotFoundException;
+import com.example.cinema.exceptions.IllegalMovieVersionAlterationException;
+import com.example.cinema.exceptions.IllegalMovieVersionException;
 import com.example.cinema.exceptions.MaxHallCapacityReachedException;
 import com.example.cinema.repositories.CinemaRepository;
 import com.example.cinema.repositories.HallRepository;
+import com.example.cinema.repositories.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -22,22 +24,22 @@ public class HallService {
 
     private final HallRepository hallRepository;
     private final CinemaRepository cinemaRepository;
+    private final MovieRepository movieRepository;
 
     public ResponseHallDTO createHall(HallDTO hallDTO) {
         Optional<Cinema> cinemaOptional = cinemaRepository.findById(hallDTO.getCinemaId());
 
-        if (cinemaOptional.isEmpty()) {
-            throw new CinemaNotFoundException("Kein Kino mit der Id " + hallDTO.getCinemaId() + " gefunden!");
-        }
-        Cinema cinema = cinemaOptional.get();
+        Cinema cinema = getCinema(hallDTO, cinemaOptional);
 
         checkHallCapacity(cinema);
+
+        MovieVersion movieVersion = getMovieVersion(hallDTO);
 
         Hall hall = Hall.builder()
                 .cinema(cinema)
                 .capacity(hallDTO.getCapacity())
                 .occupiedSeats(hallDTO.getOccupiedSeats())
-                .supportedMovieVersion(hallDTO.getSupportedMovieVersion())
+                .supportedMovieVersion(movieVersion)
                 .build();
 
         hallRepository.save(hall);
@@ -51,12 +53,9 @@ public class HallService {
         );
     }
 
-    public ResponseHallDTO getHallById(int hallId){
-        if(hallRepository.findById(hallId).isEmpty()){
-            throw new NoSuchElementException("Kein Saal mit der ID " + hallId + " gefunden!");
-        }
 
-        Hall hall = hallRepository.findById(hallId).get();
+    public ResponseHallDTO getHallById(int hallId) {
+        Hall hall = getHall(hallId);
 
         return new ResponseHallDTO(
                 hall.getId(),
@@ -67,18 +66,24 @@ public class HallService {
         );
     }
 
-    public ResponseHallDTO updateHall(int hallId, UpdateHallDTO updateHallDTO){
-        if(hallRepository.findById(hallId).isEmpty()){
-            throw new NoSuchElementException("Kein Saal mit der ID " + hallId + " gefunden!");
+
+    public ResponseHallDTO updateHall(int hallId, UpdateHallDTO updateHallDTO) {
+        Hall hall = getHall(hallId);
+
+        if(movieRepository.findByHallId(hallId) != null){
+            throw new IllegalArgumentException("Der Saal mit der ID " + hallId + " hat noch Filme zugeordnet. Sääle kann nur bearbeiten werden, wenn keine Filme zugeordnet sind");
         }
 
-        Hall hall = hallRepository.findById(hallId).get();
+        MovieVersion movieVersion = getMovieVersion(updateHallDTO);
+
+        if((hall.getSupportedMovieVersion() != movieVersion) && !(hall.getSupportedMovieVersion() == MovieVersion.DBOX && movieVersion == MovieVersion.R3D)){
+            throw new IllegalMovieVersionAlterationException("Filmversion kann nur von DBOX auf R3D geändert werden");
+        }
 
         hall.setCapacity(updateHallDTO.getCapacity());
         hall.setOccupiedSeats(updateHallDTO.getOccupiedSeats());
-        hall.setSupportedMovieVersion(updateHallDTO.getSupportedMovieVersion());
+        hall.setSupportedMovieVersion(movieVersion);
 
-        //TODO: ändern nicht möglich wenn Filme zugeordnet sind
         hallRepository.save(hall);
 
         return new ResponseHallDTO(
@@ -86,8 +91,23 @@ public class HallService {
                 hall.getCinema().getId(),
                 hall.getCapacity(),
                 hall.getOccupiedSeats(),
-                hall.getSupportedMovieVersion() //TODO: darf nur von 5D auf 3D geändert werden
+                hall.getSupportedMovieVersion()
         );
+    }
+
+    private static Cinema getCinema(HallDTO hallDTO, Optional<Cinema> cinemaOptional) {
+        if (cinemaOptional.isEmpty()) {
+            throw new CinemaNotFoundException("Kein Kino mit der Id " + hallDTO.getCinemaId() + " gefunden!");
+        }
+        return cinemaOptional.get();
+    }
+
+    private Hall getHall(int hallId) {
+        if (hallRepository.findById(hallId).isEmpty()) {
+            throw new NoSuchElementException("Kein Saal mit der ID " + hallId + " gefunden!");
+        }
+
+        return hallRepository.findById(hallId).get();
     }
 
     private void checkHallCapacity(Cinema cinema) {
@@ -95,8 +115,29 @@ public class HallService {
         int hallCount = (int) hallList.stream()
                 .filter(hall -> hall.getCinema().getId() == cinema.getId())
                 .count();
-        if(hallCount >= cinema.getMaxHalls()){
-            throw new MaxHallCapacityReachedException("Die maximale Anzahl an Kinosälen wurden erreicht. Es kann keine neuer Sall hinzugefügt werden");
+        if (hallCount >= cinema.getMaxHalls()) {
+            throw new MaxHallCapacityReachedException("Die maximale Anzahl an Kinosälen wurden erreicht. Es kann keine neuer Saal hinzugefügt werden");
         }
+    }
+
+
+    private static MovieVersion getMovieVersion(HallDTO hallDTO) {
+        MovieVersion movieVersion;
+        try {
+            movieVersion = MovieVersion.valueOf(hallDTO.getSupportedMovieVersion());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalMovieVersionException("Die Filmversion " + hallDTO.getSupportedMovieVersion() + " kann nicht angelegt werden.");
+        }
+        return movieVersion;
+    }
+
+    private static MovieVersion getMovieVersion(UpdateHallDTO updateHallDTO) {
+        MovieVersion movieVersion;
+        try {
+            movieVersion = MovieVersion.valueOf(updateHallDTO.getSupportedMovieVersion());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalMovieVersionException("Die Filmversion " + updateHallDTO.getSupportedMovieVersion() + " kann nicht angelegt werden.");
+        }
+        return movieVersion;
     }
 }

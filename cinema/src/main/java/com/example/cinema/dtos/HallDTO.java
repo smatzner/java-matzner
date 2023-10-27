@@ -1,10 +1,13 @@
 package com.example.cinema.dtos;
 
+import com.example.cinema.entities.MovieVersion;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
 
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 public class HallDTO {
@@ -13,3 +16,4 @@ public class HallDTO {
     private int occupiedSeats;
     private String supportedMovieVersion;
 }
+
