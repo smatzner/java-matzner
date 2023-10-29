@@ -1,15 +1,16 @@
-package com.example.cinema.dtos;
+package com.example.cinema.dto;
 
-import com.example.cinema.entities.MovieVersion;
 import lombok.*;
 
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-public class UpdateHallDTO {
+public class HallDTO {
+    private int cinemaId;
     private int capacity;
     private int occupiedSeats;
     private String supportedMovieVersion;
 }
+

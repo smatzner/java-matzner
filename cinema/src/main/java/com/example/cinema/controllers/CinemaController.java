@@ -1,8 +1,8 @@
 package com.example.cinema.controllers;
 
-import com.example.cinema.dtos.CinemaDTO;
-import com.example.cinema.dtos.ResponseCinemaDTO;
-import com.example.cinema.dtos.ResponseCinemaWithHallsDTO;
+import com.example.cinema.dto.CinemaDTO;
+import com.example.cinema.dto.ResponseCinemaDTO;
+import com.example.cinema.dto.ResponseCinemaWithHallsDTO;
 import com.example.cinema.services.CinemaService;
 import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;

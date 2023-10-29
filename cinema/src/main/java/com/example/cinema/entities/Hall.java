@@ -28,6 +28,9 @@ public class Hall {
     @Enumerated(EnumType.STRING)
     private MovieVersion supportedMovieVersion;
 
+//    @OneToMany(mappedBy = "hall")
+//    private List<Movie> movies;
+
     @OneToMany(mappedBy = "hall")
-    private List<Movie> movies;
+    private List<Hall_Movie> hallMovieList;
 }

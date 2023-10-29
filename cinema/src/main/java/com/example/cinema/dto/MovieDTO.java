@@ -1,6 +1,5 @@
-package com.example.cinema.dtos;
+package com.example.cinema.dto;
 
-import com.example.cinema.entities.MovieVersion;
 import lombok.*;
 
 import java.util.Date;
@@ -11,7 +10,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class MovieDTO {
-    private int hallId;
+//    private int hallId;
     private String title;
     private String mainCharacter;
     private String description;

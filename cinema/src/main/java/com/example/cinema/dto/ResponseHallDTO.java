@@ -1,4 +1,4 @@
-package com.example.cinema.dtos;
+package com.example.cinema.dto;
 
 import com.example.cinema.entities.MovieVersion;
 import lombok.*;

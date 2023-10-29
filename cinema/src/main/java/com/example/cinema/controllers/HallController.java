@@ -1,8 +1,9 @@
 package com.example.cinema.controllers;
 
-import com.example.cinema.dtos.HallDTO;
-import com.example.cinema.dtos.ResponseHallDTO;
-import com.example.cinema.dtos.UpdateHallDTO;
+import com.example.cinema.dto.HallDTO;
+import com.example.cinema.dto.MovieDTO;
+import com.example.cinema.dto.ResponseHallDTO;
+import com.example.cinema.dto.UpdateHallDTO;
 import com.example.cinema.exceptions.*;
 import com.example.cinema.services.HallService;
 import lombok.RequiredArgsConstructor;
@@ -53,5 +54,10 @@ public class HallController {
         } catch (IllegalMovieVersionAlterationException | IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
+    }
+
+    @PostMapping("{hallId}/movie")
+    public ResponseEntity<?> addMovieToHall(@PathVariable int hallId, @RequestBody MovieDTO movieDTO){
+        return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body("I'm a teapot");
     }
 }

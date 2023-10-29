@@ -1,4 +1,4 @@
-package com.example.cinema.dtos;
+package com.example.cinema.dto;
 
 import lombok.*;
 
@@ -7,9 +7,11 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CinemaDTO {
+public class ResponseCinemaDTO {
+    private int id;
     private String name;
     private String address;
     private String manager;
     private int maxHalls;
 }
+

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Builder
 @NoArgsConstructor
@@ -17,9 +18,9 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "hall_id")
-    private Hall hall;
+//    @ManyToOne
+//    @JoinColumn(name = "hall_id")
+//    private Hall hall;
 
     @Column(nullable = false)
     private String title;
@@ -34,4 +35,7 @@ public class Movie {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private MovieVersion movieVersion;
+
+    @OneToMany(mappedBy = "movie")
+    private List<Hall_Movie> hallMovieList;
 }

@@ -1,18 +1,19 @@
 package com.example.cinema.services;
 
-import com.example.cinema.dtos.CinemaDTO;
-import com.example.cinema.dtos.ResponseCinemaDTO;
-import com.example.cinema.dtos.ResponseCinemaWithHallsDTO;
-import com.example.cinema.dtos.ResponseHallDTO;
+import com.example.cinema.dto.CinemaDTO;
+import com.example.cinema.dto.ResponseCinemaDTO;
+import com.example.cinema.dto.ResponseCinemaWithHallsDTO;
+import com.example.cinema.dto.ResponseHallDTO;
 import com.example.cinema.entities.Cinema;
 import com.example.cinema.entities.Hall;
+import com.example.cinema.entities.Hall_Movie;
 import com.example.cinema.entities.Movie;
 import com.example.cinema.repositories.CinemaRepository;
 import com.example.cinema.repositories.HallRepository;
+import com.example.cinema.repositories.Hall_MovieRepository;
 import com.example.cinema.repositories.MovieRepository;
 import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.sql.exec.ExecutionException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -24,7 +25,7 @@ public class CinemaService {
     private final CinemaRepository cinemaRepository;
     private final HallRepository hallRepository;
     private final MovieRepository movieRepository;
-
+    private final Hall_MovieRepository hall_movieRepository;
     public ResponseCinemaDTO createCinema(CinemaDTO cinemaDTO){
 
         List<Cinema> cinemas = cinemaRepository.findAll();
@@ -127,11 +128,14 @@ public class CinemaService {
 
     private void deleteCinemaHalls(int cinemaId) {
         List<Hall> hallList = hallRepository.findAll();
-        List<Movie> movieList = movieRepository.findAll();
+        List<Hall_Movie> hall_movieList = hall_movieRepository.findAll();
 
         hallList.forEach(hall -> {
             if (hall.getCinema().getId() == cinemaId){
-                if (movieList.stream().anyMatch(movie -> movie.getHall().getId() == hall.getId())){
+//                if (movieList.stream().anyMatch(movie -> movie.getHall().getId() == hall.getId())){
+//                    throw new IllegalArgumentException("Kino kann nicht gelöscht werden: Dem Saal " + hall.getId() + " ist noch ein Film zugeordnet.");
+//                }
+                if(hall_movieList.stream().anyMatch(hallMovie -> hallMovie.getHall().getId() == hall.getId())){
                     throw new IllegalArgumentException("Kino kann nicht gelöscht werden: Dem Saal " + hall.getId() + " ist noch ein Film zugeordnet.");
                 }
             }

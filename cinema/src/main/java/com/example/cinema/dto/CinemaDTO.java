@@ -1,19 +1,15 @@
-package com.example.cinema.dtos;
+package com.example.cinema.dto;
 
 import lombok.*;
-
-import java.util.List;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class ResponseCinemaDTO {
-    private int id;
+public class CinemaDTO {
     private String name;
     private String address;
     private String manager;
     private int maxHalls;
 }
-
